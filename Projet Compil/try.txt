@@ -1,0 +1,30 @@
+import numpy as np 
+x=2
+
+
+bison -v  syntax.y -o  pp -> pour les conflicts
+
+
+
+
+
+
+
+
+entier [+-] {chiffre1}{chiffre}*|0
+float ({chiffre1}|0)*"."{chiffre}*
+char \'{lettre}\'|\`{lettre}\`|\"{lettre}\"
+boolean [false true]
+
+
+
+{int} {yylval.entier=atoi(yytext); 
+//         Col = Col + strlen(yytext);
+//         if(yylval.entier>32767 || yylval.entier<(-32768))
+//         {
+// 			printf ("Erreur lexicale: depassement de la taille des entiers  a la Ligne %d et a la colonne %d \n", nb_ligne, Col);
+// 		}
+
+//         }
+// {char}  {  yylval.car=strdup(yytext); printf("Ligne %d char reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_car;}
+// {bool} {yylval.car=strdup(yytext); printf("ligne %d : boolean reconnu %s \n",nb_ligne,yytext);Col=Col+strlen(yytext); return cst_bool; }     
