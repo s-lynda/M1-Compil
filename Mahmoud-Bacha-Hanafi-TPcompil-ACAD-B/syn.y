@@ -158,12 +158,12 @@ INST : AFFECT | IF_ELSE | WHILE | FOR_RANGE ;
 // tester existance de idf2 + compatibilité de type 
 // le type int et float sont compatible
 
-AFFECT :    idf affectation idf SAUT
-          {
+AFFECT :    idf affec
             if(doubleDeclaration($3)==0){
                printf("    >>>>>>> Erreur semantique ligne %d colonne %d   idf %s n'existe pas \n",semligne,semcol,$3);
             }else{
-               get_type_of_idf($3,sauvidf);
+               get_type_of_idftation idf SAUT
+          {($3,sauvidf);
                get_type_of_idf($1,sauvval);
                if(type_compatible(sauvval,sauvidf)==0){
                   printf("    >>>>>>> Erreur semantique ligne %d colonne %d INCOMPATIBILITE DE TYPE , %s est %s , ne peut pas recevoir %s \n",semligne,semcol,$1,sauvval,sauvidf);

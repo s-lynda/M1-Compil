@@ -2,88 +2,100 @@
 #include "syntax.tab.h"
 #include <String.h>
 #include <stdio.h>
-    /* Définition en langage C*/
-extern int  nb_ligne;
-extern int Col;
-extern YYSTYPE yylval;
 
+    /* Définition en langage C*/
+extern  nb_ligne;
+// extern int Col;
+extern YYSTYPE yylval;
 %}
 /* Définition des regex*/
-letter [a-zA-Z]
+letter_min [a-z]
 letter_Maj [A-Z]
 Number [0-9]
 Number1 [1-9]
+
 /* Les types de variables */
 /* Int & float ( les valeurs négatives sont entre parenthèse)*/
-int  {Number1}{Number}*|0|"\("[+-]{Number1}+"\)"
-float  ({Number1}|0)*"."{Number}*|"\("[+-]({Number1}|0)*"."{Number}*"\)"
-char {letter}
-bool [true false]
+Int  {Number1}{Number}*|0|"\("[+-]{Number1}+"\)"
+float  (({Number1}{Number}*|0)"."{Number}+)|("\("[+-]({Number1}{Number}*|0)"."{Number}+"\)")
+char [.|\n]
+bool true|false
+
 /* Identificateur */
-IDF {letter_Maj}({letter}|{Number})*
+IDF {letter_Maj}({letter_min}|{Number})*
 /* Constante */
 cst {Number}+
-/*Comment */
+/*Commentaire */
 comment \#.*"\n"
 %%
-"import" {return mc_import;Col=Col+strlen(yytext);}
-"as" {return mc_as;Col=Col+strlen(yytext);}
-"numpy" {return mc_numpy;Col=Col+strlen(yytext);}
-"cv2" {return mc_cv2;Col=Col+strlen(yytext);}
-"PIL" {return mc_pil;Col=Col+strlen(yytext);}
-Image {return mc_Img;Col=Col+strlen(yytext);}
-ImageDrax { return mc_imgDraw;Col=Col+strlen(yytext); }
-asarray {return mc_npf1;Col=Col+strlen(yytext);}
-array {return mc_npf2;Col=Col+strlen(yytext);}
-copy {return mc_npf3;Col=Col+strlen(yytext);}
-save {return mc_pilf3;Col=Col+strlen(yytext);}
-fromarray {return mc_pilf2;Col=Col+strlen(yytext);}
-open { return mc_pilf1; Col=Col+strlen(yytext);}
-imread {return mc_cv2f1;Col=Col+strlen(yytext);}
-imwrite {return mc_cv2f2;Col=Col+strlen(yytext);}
-from {return mc_from;Col=Col+strlen(yytext); }
-{IDF} {return idf;}
+import {return mc_import;}
+as {return mc_as;}
+numpy {return mc_numpy;}
+PIL {return mc_pil;}
+Image {return mc_Img;}
+open { return mc_pilf1;}
+asarray {return mc_npf1;}
+save {return mc_pilf3;}
+fromarray {return mc_pilf2;}
+from {return mc_from;}
+range {return mc_range;}
+in {return mc_in;}
+{IDF} {yylval.str=strdup(yytext); 
+      if(yyleng<=8)
+      {
+        yylval.str=strdup(yytext); 
+        return idf;
+      }
+      else {
+        printf ("Erreur lexicale Ligne %d colonne , IDF %s trop long   \n", nb_ligne, yytext);
+      }
+      }
+{Int} { yylval.entier=atoi(yytext); 
+        if(yyval.entier<32767 || yyval.entier>(-32767))
+        {  return cst_int;
+        }
+        else {
+            printf ("Erreur lexicale: depassement de la taille des entiers a la Ligne %d et a la colonne  \n", nb_ligne);
+        }
+       }
 {cst} {return cst;}
-"+" { return plus;Col=Col+strlen(yytext);  }
-"-" { return minus;Col=Col+strlen(yytext);  }
-"*" {return mul;Col=Col+strlen(yytext);  }
-"/" {return division;Col=Col+strlen(yytext);  }
-"and" {return mc_and;Col=Col+strlen(yytext);  }
-"or" {return mc_OR;Col=Col+strlen(yytext);  }
-"not" {return mc_not;Col=Col+strlen(yytext);  }
-">"	{return sup;Col=Col+strlen(yytext);  }
-"<"	{return inf;Col=Col+strlen(yytext);  }
-"<=" {return infOuEg;Col=Col+strlen(yytext);  }
-">=" {return SupOuEg;Col=Col+strlen(yytext);  }
-"!=" {return diff;Col=Col+strlen(yytext);  }
-"==" {return egale;Col=Col+strlen(yytext);  }
-"=" { return mc_aff;Col=Col+strlen(yytext);  }
-"\'" {return mc_app;Col=Col+strlen(yytext);  }
-"(" {return par_O;Col=Col+strlen(yytext);  }
-")" {return par_F;Col=Col+strlen(yytext);  }
-"if" {return mc_if;Col=Col+strlen(yytext);  }
-"else" {return mc_else;Col=Col+strlen(yytext);  }
-"for" {return mc_for;Col=Col+strlen(yytext);  }
-"in" {return mc_in;Col=Col+strlen(yytext);  }
-range {return mc_range;Col=Col+strlen(yytext);  }
-"," {return vrg;Col=Col+strlen(yytext);  }
-":" {return mc_2p;Col=Col+strlen(yytext);  }
-"while" {return mc_while;Col=Col+strlen(yytext);  }
-"[" {return acc_O;Col=Col+strlen(yytext);  }
-"]" { return acc_F;Col=Col+strlen(yytext);  }
-"int" {return mc_int;Col=Col+strlen(yytext);  }
-"float" {return mc_float;Col=Col+strlen(yytext);  }
-"bool" {return mc_bool;Col=Col+strlen(yytext);  }
-"char" {return mc_char;Col=Col+strlen(yytext);  }
+{float} {yylval.reel=atof(yytext); return cst_float;}
+{char} {yylval.car=strdup(yytext); return cst_char;}
+{bool} {yylval.car=strdup(yytext); return cst_bool;}
+"Int" {yylval.str=strdup(yytext);return mc_int;}
+"float" {yylval.str=strdup(yytext);return mc_float;}
+"bool" {yylval.str=strdup(yytext);return mc_bool;}
+"char" {yylval.str=strdup(yytext);return mc_char;}
+"=" { return mc_aff;}
+"+" { return plus; }
+"-" { return minus;}
+"*" {return mul;  }
+"/" {return division;}
+"and" {return mc_and;  }
+"or" {return mc_OR;  }
+"not" {return mc_not;  }
+">"	{return sup;  }
+"<"	{return inf;  }
+"<=" {return infOuEg;  }
+">=" {return SupOuEg;  }
+"!=" {return diff;  }
+"==" {return egale;  }
+"\'" {return mc_app;  }
+"(" {return par_O;  }
+")" {return par_F;  }
+"if" {return mc_if;  }
+"else" {return mc_else;  }
+"for" {return mc_for;  }
+"," {return vrg;  }
+":" {return mc_2p;  }
+"while" {return mc_while;  }
+"[" {return croch_O;}
+"]" { return croch_F;}
+\" { return guillemets; }
 {comment} {nb_ligne++;}
-[ \t ] { Col = Col + strlen(yytext); }
-
-
-. printf("Erreur lexicale ligne %d colonne %d sur l'entite %s\n",nb_ligne,Col,yytext);
+\n {return sautdligne;}
+"    " {return tabulation;}
+[ \t ] 
+. printf("Erreur lexicale ligne %d colonne sur l'entite %s\n",nb_ligne,yytext);
 
 %%
-// int main () 
-// {
-// yylex() ; 
-// return 0; 
-// }

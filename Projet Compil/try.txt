@@ -27,4 +27,4 @@ boolean [false true]
 
 //         }
 // {char}  {  yylval.car=strdup(yytext); printf("Ligne %d char reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_car;}
-// {bool} {yylval.car=strdup(yytext); printf("ligne %d : boolean reconnu %s \n",nb_ligne,yytext);Col=Col+strlen(yytext); return cst_bool; }     
+// {bool} {yylval.car=strdup(yytext); printf("ligne %d : boolean reconnu %s \n",nb_ligne,yytext); return cst_bool; }     
