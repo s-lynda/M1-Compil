@@ -24,78 +24,78 @@ IDF {letter_Maj}({letter_min}|{Number})*
 /*Commentaire */
 comment \#.*"\n"
 %%
-import {Col=Col+yyleng;return mc_import;}
-as {Col=Col+strlen(yytext);return mc_as;}
-numpy {return mc_numpy;Col=Col+yyleng;}
-PIL {return mc_pil;Col=Col+yyleng;}
-Image {return mc_Img;Col=Col+yyleng;}
-open {return mc_pilf1;Col=Col+yyleng;}
-asarray {return mc_npf1;Col=Col+yyleng;}
-save {return mc_pilf3;Col=Col+yyleng;}
-fromarray { return mc_pilf2;Col=Col+yyleng;}
-from {return mc_from;Col=Col+yyleng;}
-range { return mc_range;Col=Col+yyleng;}
-in {return mc_in;Col=Col+yyleng;}
-"Int" {yylval.str=strdup(yytext); return mc_Int; Col=Col+yyleng;}
+import {Col=Col+strlen(yytext);return mc_import;}
+as {Col=Col+strlen(yytext); return mc_as;}
+numpy {Col=Col+strlen(yytext); return mc_numpy;}
+PIL {Col=Col+strlen(yytext);return mc_pil;}
+Image {Col=Col+strlen(yytext);return mc_Img;}
+open {Col=Col+strlen(yytext);return mc_pilf1;}
+asarray {Col=Col+strlen(yytext); return mc_npf1;}
+save {Col=Col+strlen(yytext);return mc_pilf3;}
+fromarray {Col=Col+strlen(yytext); return mc_pilf2;}
+from {Col=Col+strlen(yytext);return mc_from;}
+range {Col=Col+strlen(yytext); return mc_range;}
+in {Col=Col+strlen(yytext);return mc_in;}
+Int {yylval.str=strdup(yytext); Col=Col+strlen(yytext);return mc_Int; }
 {IDF} {
+        Col=Col+strlen(yytext);
        if(yyleng<=8)
        {
         yylval.str=strdup(yytext); 
         return idf;
        }
       else {
-        Col = Col +yyleng;
         printf ("Erreur lexicale Ligne %d colonne %d , IDF %s trop long   \n", nb_ligne,Col, yytext);
       }
       }
 {Int} { 
+        Col=Col+strlen(yytext);
         yylval.entier=atoi(yytext); 
         if((yylval.entier>(-32767)) && (yylval.entier<32767))
         {  
           return cst_int;
         }
         else {
-            Col=Col+yyleng;
             printf ("Erreur lexicale: depassement de la taille des entiers a la Ligne %d et a la colonne %d  \n",nb_ligne,Col);
             
         }
        }
-{float} {yylval.reel=atof(yytext); return cst_reel;Col=Col+yyleng;}
-{char} {yylval.car=strdup(yytext); return cst_char;Col=Col+yyleng;}
-{bool} {yylval.str=strdup(yytext); return cst_bool;Col=Col+yyleng;}
-"float" {yylval.str=strdup(yytext);return mc_float;Col=Col+yyleng;}
-"bool" {yylval.str=strdup(yytext); return mc_bool;Col=Col+yyleng;}
-"char" {yylval.str=strdup(yytext); return mc_char;Col=Col+yyleng;}
-"=" { return mc_aff;Col=Col+yyleng;}
-"+" { return plus; Col=Col+yyleng;}
-"-" { return minus; Col=Col+yyleng;}
-"*" {return mul; Col=Col+yyleng; }
-"/" {return division;Col=Col+yyleng;}
-"and" {return mc_and; Col=Col+yyleng; }
-"or" {return mc_OR; Col=Col+yyleng; }
-"not" {return mc_not; Col=Col+yyleng; }
-">"	{return sup; Col=Col+yyleng; }
-"<"	{return inf; Col=Col+yyleng; }
-"<=" {return infOuEg; Col=Col+yyleng; }
-">=" {return SupOuEg; Col=Col+yyleng; }
-"!=" {return diff; Col=Col+yyleng; }
-"==" {return egale; Col=Col+yyleng; }
-"\'" {return mc_app;  Col=Col+yyleng;}
-"(" {return par_O; Col=Col+yyleng; }
-")" {return par_F; Col=Col+yyleng; }
-"if" {return mc_if;Col=Col+yyleng;  }
-"else" {return mc_else; Col=Col+yyleng; }
-"for" {return mc_for;Col=Col+yyleng;  }
-"," {return vrg; Col=Col+yyleng; }
-":" {return mc_2p; Col=Col+yyleng; }
-"while" {return mc_while;Col=Col+yyleng;}
-"[" {return croch_O;Col=Col+yyleng;}
-"]" { return croch_F;Col=Col+yyleng;}
-"\"" { return guillemets;Col=Col+yyleng;}
-"    " {return tabulation;Col=Col+4;}
+{float} {yylval.reel=atof(yytext);Col=Col+strlen(yytext); return cst_reel;}
+{char} {yylval.car=strdup(yytext);Col=Col+strlen(yytext); return cst_char;}
+{bool} {yylval.str=strdup(yytext); Col=Col+strlen(yytext); return cst_bool;}
+"float" {yylval.str=strdup(yytext);Col=Col+strlen(yytext);return mc_float;}
+"bool" {yylval.str=strdup(yytext);Col=Col+strlen(yytext); return mc_bool;}
+"char" {yylval.str=strdup(yytext); Col=Col+strlen(yytext);return mc_char;}
+"=" { Col=Col+strlen(yytext); return mc_aff;}
+"+" { Col=Col+strlen(yytext); return plus; }
+"-" { Col=Col+strlen(yytext);return minus; }
+"*" {Col=Col+strlen(yytext); return mul;  }
+"/" {Col=Col+strlen(yytext);return division;}
+"and" {Col=Col+strlen(yytext);return mc_and;  }
+"or" {Col=Col+strlen(yytext);return mc_OR;  }
+"not" {Col=Col+strlen(yytext); return mc_not;  }
+">"	{Col=Col+strlen(yytext); return sup;  }
+"<"	{Col=Col+strlen(yytext); return inf;  }
+"<=" {Col=Col+strlen(yytext);return infOuEg;  }
+">=" {Col=Col+strlen(yytext); return SupOuEg;  }
+"!=" {Col=Col+strlen(yytext);return diff;  }
+"==" {Col=Col+strlen(yytext); return egale;  }
+"\'" {Col=Col+strlen(yytext);return mc_app;  }
+"(" {Col=Col+strlen(yytext); return par_O;  }
+")" {Col=Col+strlen(yytext); return par_F;  }
+"if" {Col=Col+strlen(yytext); return mc_if;  }
+"else" {Col=Col+strlen(yytext); return mc_else;  }
+"for" {Col=Col+strlen(yytext); return mc_for;  }
+"," {Col=Col+strlen(yytext);return vrg;  }
+":" {Col=Col+strlen(yytext); return mc_2p;  }
+"while" {Col=Col+strlen(yytext); return mc_while;}
+"[" {Col=Col+strlen(yytext); return croch_O;}
+"]" { Col=Col+strlen(yytext); return croch_F;}
+"\"" { Col=Col+strlen(yytext); return guillemets;}
+"    " {Col=Col+strlen(yytext); return tabulation;Col=Col+4;}
 {comment} {nb_ligne++;}
 [ \t] {Col++;}
-\n { nb_ligne++; Col = 1; return sautdligne; }
+\n { nb_ligne++; Col = 1; return sautdligne;}
 . printf("Erreur lexicale ligne %d colonne %d sur l'entite %s\n",nb_ligne,Col,yytext);
 
 %%

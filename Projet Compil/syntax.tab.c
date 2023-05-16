@@ -176,12 +176,11 @@ typedef union YYSTYPE
         int entier;
         char* str;
         float reel;
-        char* car;
 
 
 
 /* Line 214 of yacc.c  */
-#line 185 "syntax.tab.c"
+#line 184 "syntax.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -193,7 +192,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 197 "syntax.tab.c"
+#line 196 "syntax.tab.c"
 
 #ifdef short
 # undef short
@@ -513,14 +512,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    43,    43,    44,    45,    46,    48,    52,    53,    55,
-      56,    57,    60,    61,    64,    67,    68,    72,    80,    81,
-      83,    84,    85,    86,    89,    90,    91,    92,    96,    97,
-      98,    99,   101,   102,   103,   104,   107,   108,   111,   114,
-     115,   116,   117,   118,   119,   120,   123,   124,   128,   131,
-     133,   135,   136,   138,   139,   140,   141,   142,   143,   145,
-     148,   149,   150,   152,   153,   155,   158,   160,   162,   163,
-     165
+       0,    42,    42,    43,    44,    45,    47,    51,    52,    54,
+      55,    56,    59,    60,    63,    66,    67,    71,    79,    80,
+      82,    83,    84,    85,    88,    89,    90,    91,    95,    96,
+      97,    98,   100,   101,   102,   103,   106,   107,   110,   113,
+     114,   115,   116,   117,   118,   119,   122,   123,   127,   130,
+     132,   134,   135,   137,   138,   139,   140,   141,   142,   144,
+     147,   148,   149,   151,   152,   154,   157,   159,   161,   162,
+     164
 };
 #endif
 
@@ -1537,7 +1536,7 @@ yyreduce:
         case 6:
 
 /* Line 1455 of yacc.c  */
-#line 48 "syntax.y"
+#line 47 "syntax.y"
     {printf("syntaxe correcte"); 
     ;}
     break;
@@ -1545,7 +1544,7 @@ yyreduce:
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 73 "syntax.y"
+#line 72 "syntax.y"
     {if((yyvsp[(4) - (5)].entier)<=0)
         {
         printf("Erreur Semantique: Taille du tableau doit etre >0");
@@ -1556,7 +1555,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 1560 "syntax.tab.c"
+#line 1559 "syntax.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1768,7 +1767,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 168 "syntax.y"
+#line 167 "syntax.y"
         
 void main()
 { 
@@ -1780,6 +1779,6 @@ void yywrap()
 }
 int yyerror(char *msg)
 {
-  printf("\n   =====> Erreur Syntaxique  \n au niveau la ligne %d et a la colonne %d \n",nb_ligne,Col);
+  printf("\n=====> Erreur Syntaxique  \n au niveau la ligne %d et a la colonne %d \n",nb_ligne,Col);
    return 1;
 }

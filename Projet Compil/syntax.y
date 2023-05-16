@@ -13,7 +13,6 @@ int Col=1;
         int entier;
         char* str;
         float reel;
-        char* car;
 }    
 %token  mc_import mc_as mc_numpy  mc_pil mc_Img
         mc_npf1   mc_npf3 mc_pilf3  mc_pilf2 mc_pilf1 mc_cv2f1
@@ -176,6 +175,6 @@ void yywrap()
 }
 int yyerror(char *msg)
 {
-  printf("\n   =====> Erreur Syntaxique  \n au niveau la ligne %d et a la colonne %d \n",nb_ligne,Col);
+  printf("\n=====> Erreur Syntaxique  \n au niveau la ligne %d et a la colonne %d \n",nb_ligne,Col);
    return 1;
 }

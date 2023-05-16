@@ -106,12 +106,11 @@ typedef union YYSTYPE
         int entier;
         char* str;
         float reel;
-        char* car;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 115 "syntax.tab.h"
+#line 114 "syntax.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

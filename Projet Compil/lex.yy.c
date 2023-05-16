@@ -707,79 +707,79 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 27 "lexical.l"
-{Col=Col+yyleng;return mc_import;}
+{Col=Col+strlen(yytext);return mc_import;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 28 "lexical.l"
-{Col=Col+strlen(yytext);return mc_as;}
+{Col=Col+strlen(yytext); return mc_as;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 29 "lexical.l"
-{return mc_numpy;Col=Col+yyleng;}
+{Col=Col+strlen(yytext); return mc_numpy;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 30 "lexical.l"
-{return mc_pil;Col=Col+yyleng;}
+{Col=Col+strlen(yytext);return mc_pil;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 31 "lexical.l"
-{return mc_Img;Col=Col+yyleng;}
+{Col=Col+strlen(yytext);return mc_Img;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 32 "lexical.l"
-{return mc_pilf1;Col=Col+yyleng;}
+{Col=Col+strlen(yytext);return mc_pilf1;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 33 "lexical.l"
-{return mc_npf1;Col=Col+yyleng;}
+{Col=Col+strlen(yytext); return mc_npf1;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 34 "lexical.l"
-{return mc_pilf3;Col=Col+yyleng;}
+{Col=Col+strlen(yytext);return mc_pilf3;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 35 "lexical.l"
-{ return mc_pilf2;Col=Col+yyleng;}
+{Col=Col+strlen(yytext); return mc_pilf2;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 36 "lexical.l"
-{return mc_from;Col=Col+yyleng;}
+{Col=Col+strlen(yytext);return mc_from;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 37 "lexical.l"
-{ return mc_range;Col=Col+yyleng;}
+{Col=Col+strlen(yytext); return mc_range;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 38 "lexical.l"
-{return mc_in;Col=Col+yyleng;}
+{Col=Col+strlen(yytext);return mc_in;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 39 "lexical.l"
-{yylval.str=strdup(yytext); return mc_Int; Col=Col+yyleng;}
+{yylval.str=strdup(yytext); Col=Col+strlen(yytext);return mc_Int; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 40 "lexical.l"
 {
+        Col=Col+strlen(yytext);
        if(yyleng<=8)
        {
         yylval.str=strdup(yytext); 
         return idf;
        }
       else {
-        Col = Col +yyleng;
         printf ("Erreur lexicale Ligne %d colonne %d , IDF %s trop long   \n", nb_ligne,Col, yytext);
       }
       }
@@ -788,13 +788,13 @@ case 15:
 YY_RULE_SETUP
 #line 51 "lexical.l"
 { 
+        Col=Col+strlen(yytext);
         yylval.entier=atoi(yytext); 
         if((yylval.entier>(-32767)) && (yylval.entier<32767))
         {  
           return cst_int;
         }
         else {
-            Col=Col+yyleng;
             printf ("Erreur lexicale: depassement de la taille des entiers a la Ligne %d et a la colonne %d  \n",nb_ligne,Col);
             
         }
@@ -803,167 +803,167 @@ YY_RULE_SETUP
 case 16:
 YY_RULE_SETUP
 #line 63 "lexical.l"
-{yylval.reel=atof(yytext); return cst_reel;Col=Col+yyleng;}
+{yylval.reel=atof(yytext);Col=Col+strlen(yytext); return cst_reel;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 64 "lexical.l"
-{yylval.car=strdup(yytext); return cst_char;Col=Col+yyleng;}
+{yylval.car=strdup(yytext);Col=Col+strlen(yytext); return cst_char;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 65 "lexical.l"
-{yylval.str=strdup(yytext); return cst_bool;Col=Col+yyleng;}
+{yylval.str=strdup(yytext); Col=Col+strlen(yytext); return cst_bool;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 66 "lexical.l"
-{yylval.str=strdup(yytext);return mc_float;Col=Col+yyleng;}
+{yylval.str=strdup(yytext);Col=Col+strlen(yytext);return mc_float;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 67 "lexical.l"
-{yylval.str=strdup(yytext); return mc_bool;Col=Col+yyleng;}
+{yylval.str=strdup(yytext);Col=Col+strlen(yytext); return mc_bool;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 68 "lexical.l"
-{yylval.str=strdup(yytext); return mc_char;Col=Col+yyleng;}
+{yylval.str=strdup(yytext); Col=Col+strlen(yytext);return mc_char;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 69 "lexical.l"
-{ return mc_aff;Col=Col+yyleng;}
+{ Col=Col+strlen(yytext); return mc_aff;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 70 "lexical.l"
-{ return plus; Col=Col+yyleng;}
+{ Col=Col+strlen(yytext); return plus; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 71 "lexical.l"
-{ return minus; Col=Col+yyleng;}
+{ Col=Col+strlen(yytext);return minus; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 72 "lexical.l"
-{return mul; Col=Col+yyleng; }
+{Col=Col+strlen(yytext); return mul;  }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 73 "lexical.l"
-{return division;Col=Col+yyleng;}
+{Col=Col+strlen(yytext);return division;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 74 "lexical.l"
-{return mc_and; Col=Col+yyleng; }
+{Col=Col+strlen(yytext);return mc_and;  }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 75 "lexical.l"
-{return mc_OR; Col=Col+yyleng; }
+{Col=Col+strlen(yytext);return mc_OR;  }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 76 "lexical.l"
-{return mc_not; Col=Col+yyleng; }
+{Col=Col+strlen(yytext); return mc_not;  }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 77 "lexical.l"
-{return sup; Col=Col+yyleng; }
+{Col=Col+strlen(yytext); return sup;  }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 78 "lexical.l"
-{return inf; Col=Col+yyleng; }
+{Col=Col+strlen(yytext); return inf;  }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
 #line 79 "lexical.l"
-{return infOuEg; Col=Col+yyleng; }
+{Col=Col+strlen(yytext);return infOuEg;  }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
 #line 80 "lexical.l"
-{return SupOuEg; Col=Col+yyleng; }
+{Col=Col+strlen(yytext); return SupOuEg;  }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 81 "lexical.l"
-{return diff; Col=Col+yyleng; }
+{Col=Col+strlen(yytext);return diff;  }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
 #line 82 "lexical.l"
-{return egale; Col=Col+yyleng; }
+{Col=Col+strlen(yytext); return egale;  }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
 #line 83 "lexical.l"
-{return mc_app;  Col=Col+yyleng;}
+{Col=Col+strlen(yytext);return mc_app;  }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
 #line 84 "lexical.l"
-{return par_O; Col=Col+yyleng; }
+{Col=Col+strlen(yytext); return par_O;  }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
 #line 85 "lexical.l"
-{return par_F; Col=Col+yyleng; }
+{Col=Col+strlen(yytext); return par_F;  }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 86 "lexical.l"
-{return mc_if;Col=Col+yyleng;  }
+{Col=Col+strlen(yytext); return mc_if;  }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 87 "lexical.l"
-{return mc_else; Col=Col+yyleng; }
+{Col=Col+strlen(yytext); return mc_else;  }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 88 "lexical.l"
-{return mc_for;Col=Col+yyleng;  }
+{Col=Col+strlen(yytext); return mc_for;  }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 89 "lexical.l"
-{return vrg; Col=Col+yyleng; }
+{Col=Col+strlen(yytext);return vrg;  }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 90 "lexical.l"
-{return mc_2p; Col=Col+yyleng; }
+{Col=Col+strlen(yytext); return mc_2p;  }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
 #line 91 "lexical.l"
-{return mc_while;Col=Col+yyleng;}
+{Col=Col+strlen(yytext); return mc_while;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
 #line 92 "lexical.l"
-{return croch_O;Col=Col+yyleng;}
+{Col=Col+strlen(yytext); return croch_O;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
 #line 93 "lexical.l"
-{ return croch_F;Col=Col+yyleng;}
+{ Col=Col+strlen(yytext); return croch_F;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
 #line 94 "lexical.l"
-{ return guillemets;Col=Col+yyleng;}
+{ Col=Col+strlen(yytext); return guillemets;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
 #line 95 "lexical.l"
-{return tabulation;Col=Col+4;}
+{Col=Col+strlen(yytext); return tabulation;Col=Col+4;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
@@ -978,7 +978,7 @@ YY_RULE_SETUP
 case 51:
 YY_RULE_SETUP
 #line 98 "lexical.l"
-{ nb_ligne++; Col = 1; return sautdligne; }
+{ nb_ligne++; Col = 1; return sautdligne;}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
