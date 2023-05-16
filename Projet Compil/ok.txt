@@ -1,5 +1,17 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import numpy
-import numpy 
-import numpy as Np
-for i in range(0,20):
-    X=10
+import numpy as np

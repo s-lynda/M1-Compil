@@ -24,22 +24,19 @@ IDF {letter_Maj}({letter_min}|{Number})*
 /*Commentaire */
 comment \#.*"\n"
 %%
-"import" {Col=Col+yyleng;return mc_import;}
-"as" {Col=Col+strlen(yytext);return mc_as;}
-"numpy" {return mc_numpy;Col=Col+yyleng;}
-"PIL" {return mc_pil;Col=Col+yyleng;}
-"Image" {return mc_Img;Col=Col+yyleng;}
-"open" {return mc_pilf1;Col=Col+yyleng;}
-"asarray" {return mc_npf1;Col=Col+yyleng;}
-"save" {return mc_pilf3;Col=Col+yyleng;}
-"fromarray" { return mc_pilf2;Col=Col+yyleng;}
-"from" {return mc_from;Col=Col+yyleng;}
-"range" { return mc_range;Col=Col+yyleng;}
-"in" {return mc_in;Col=Col+yyleng;}
-"Int" {yylval.str=strdup(yytext); return mc_Int;Col=Col+yyleng;}
-"float" {yylval.str=strdup(yytext);return mc_float;Col=Col+yyleng;}
-"bool" {yylval.str=strdup(yytext); return mc_bool;Col=Col+yyleng;}
-"char" {yylval.str=strdup(yytext); return mc_char;Col=Col+yyleng;}
+import {Col=Col+yyleng;return mc_import;}
+as {Col=Col+strlen(yytext);return mc_as;}
+numpy {return mc_numpy;Col=Col+yyleng;}
+PIL {return mc_pil;Col=Col+yyleng;}
+Image {return mc_Img;Col=Col+yyleng;}
+open {return mc_pilf1;Col=Col+yyleng;}
+asarray {return mc_npf1;Col=Col+yyleng;}
+save {return mc_pilf3;Col=Col+yyleng;}
+fromarray { return mc_pilf2;Col=Col+yyleng;}
+from {return mc_from;Col=Col+yyleng;}
+range { return mc_range;Col=Col+yyleng;}
+in {return mc_in;Col=Col+yyleng;}
+"Int" {yylval.str=strdup(yytext); return mc_Int; Col=Col+yyleng;}
 {IDF} {
        if(yyleng<=8)
        {
@@ -66,6 +63,9 @@ comment \#.*"\n"
 {float} {yylval.reel=atof(yytext); return cst_reel;Col=Col+yyleng;}
 {char} {yylval.car=strdup(yytext); return cst_char;Col=Col+yyleng;}
 {bool} {yylval.str=strdup(yytext); return cst_bool;Col=Col+yyleng;}
+"float" {yylval.str=strdup(yytext);return mc_float;Col=Col+yyleng;}
+"bool" {yylval.str=strdup(yytext); return mc_bool;Col=Col+yyleng;}
+"char" {yylval.str=strdup(yytext); return mc_char;Col=Col+yyleng;}
 "=" { return mc_aff;Col=Col+yyleng;}
 "+" { return plus; Col=Col+yyleng;}
 "-" { return minus; Col=Col+yyleng;}
@@ -93,9 +93,9 @@ comment \#.*"\n"
 "]" { return croch_F;Col=Col+yyleng;}
 "\"" { return guillemets;Col=Col+yyleng;}
 "    " {return tabulation;Col=Col+4;}
-{comment} {Col++;}
+{comment} {nb_ligne++;}
 [ \t] {Col++;}
-\n {return sautdligne; nb_ligne++;}
+\n { nb_ligne++; Col = 1; return sautdligne; }
 . printf("Erreur lexicale ligne %d colonne %d sur l'entite %s\n",nb_ligne,Col,yytext);
 
 %%

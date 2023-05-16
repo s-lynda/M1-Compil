@@ -286,20 +286,20 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 #define YY_END_OF_BUFFER 54
 static yyconst short int yy_accept[139] =
     {   0,
-        0,    0,   54,   52,   50,   20,   50,   52,   47,   52,
-       36,   37,   38,   25,   23,   42,   24,   20,   26,   18,
-       18,   43,   31,   22,   30,   17,   17,   17,   45,   46,
+        0,    0,   54,   52,   50,   17,   50,   52,   47,   52,
+       36,   37,   38,   25,   23,   42,   24,   17,   26,   15,
+       15,   43,   31,   22,   30,   14,   14,   14,   45,   46,
        52,   52,   52,   52,   52,   52,   52,   52,   52,   52,
-       52,   52,    0,   34,    0,   49,    0,    0,   18,   32,
-       35,   33,   17,   17,   17,    0,    0,    2,    0,    0,
+       52,   52,    0,   34,    0,   49,    0,    0,   15,   32,
+       35,   33,   14,   14,   14,    0,    0,    2,    0,    0,
         0,    0,    0,    0,    0,   39,    0,   12,    0,    0,
-        0,   28,    0,    0,    0,    0,    0,    0,    0,   19,
-       17,   13,    4,   27,    0,    0,    0,    0,    0,    0,
+        0,   28,    0,    0,    0,    0,    0,    0,    0,   16,
+       14,   13,    4,   27,    0,    0,    0,    0,    0,    0,
        41,    0,    0,   29,    0,    0,    0,    0,    0,    0,
 
-       48,    0,   18,    0,    0,   17,    0,   15,   16,   40,
-        0,    0,   10,    0,    0,    6,    0,    8,   21,    0,
-        0,    5,    0,   14,    0,    0,    3,   11,   44,   19,
+       48,    0,   15,    0,    0,   14,    0,   20,   21,   40,
+        0,    0,   10,    0,    0,    6,    0,    8,   18,    0,
+        0,    5,    0,   19,    0,    0,    3,   11,   44,   16,
         0,    0,    1,    7,    0,    0,    9,    0
     } ;
 
@@ -767,26 +767,11 @@ YY_RULE_SETUP
 case 13:
 YY_RULE_SETUP
 #line 39 "lexical.l"
-{yylval.str=strdup(yytext); return mc_Int;Col=Col+yyleng;}
+{yylval.str=strdup(yytext); return mc_Int; Col=Col+yyleng;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 40 "lexical.l"
-{yylval.str=strdup(yytext);return mc_float;Col=Col+yyleng;}
-	YY_BREAK
-case 15:
-YY_RULE_SETUP
-#line 41 "lexical.l"
-{yylval.str=strdup(yytext); return mc_bool;Col=Col+yyleng;}
-	YY_BREAK
-case 16:
-YY_RULE_SETUP
-#line 42 "lexical.l"
-{yylval.str=strdup(yytext); return mc_char;Col=Col+yyleng;}
-	YY_BREAK
-case 17:
-YY_RULE_SETUP
-#line 43 "lexical.l"
 {
        if(yyleng<=8)
        {
@@ -799,9 +784,9 @@ YY_RULE_SETUP
       }
       }
 	YY_BREAK
-case 18:
+case 15:
 YY_RULE_SETUP
-#line 54 "lexical.l"
+#line 51 "lexical.l"
 { 
         yylval.entier=atoi(yytext); 
         if((yylval.entier>(-32767)) && (yylval.entier<32767))
@@ -815,20 +800,35 @@ YY_RULE_SETUP
         }
        }
 	YY_BREAK
+case 16:
+YY_RULE_SETUP
+#line 63 "lexical.l"
+{yylval.reel=atof(yytext); return cst_reel;Col=Col+yyleng;}
+	YY_BREAK
+case 17:
+YY_RULE_SETUP
+#line 64 "lexical.l"
+{yylval.car=strdup(yytext); return cst_char;Col=Col+yyleng;}
+	YY_BREAK
+case 18:
+YY_RULE_SETUP
+#line 65 "lexical.l"
+{yylval.str=strdup(yytext); return cst_bool;Col=Col+yyleng;}
+	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 66 "lexical.l"
-{yylval.reel=atof(yytext); return cst_reel;Col=Col+yyleng;}
+{yylval.str=strdup(yytext);return mc_float;Col=Col+yyleng;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 67 "lexical.l"
-{yylval.car=strdup(yytext); return cst_char;Col=Col+yyleng;}
+{yylval.str=strdup(yytext); return mc_bool;Col=Col+yyleng;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 68 "lexical.l"
-{yylval.str=strdup(yytext); return cst_bool;Col=Col+yyleng;}
+{yylval.str=strdup(yytext); return mc_char;Col=Col+yyleng;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
@@ -968,7 +968,7 @@ YY_RULE_SETUP
 case 49:
 YY_RULE_SETUP
 #line 96 "lexical.l"
-{Col++;}
+{nb_ligne++;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
@@ -978,7 +978,7 @@ YY_RULE_SETUP
 case 51:
 YY_RULE_SETUP
 #line 98 "lexical.l"
-{return sautdligne; nb_ligne++;}
+{ nb_ligne++; Col = 1; return sautdligne; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
