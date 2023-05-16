@@ -63,35 +63,34 @@
      mc_float = 279,
      mc_bool = 280,
      mc_char = 281,
-     cst = 282,
-     mc_aff = 283,
-     plus = 284,
-     minus = 285,
-     mul = 286,
-     division = 287,
-     mc_and = 288,
-     mc_OR = 289,
-     mc_not = 290,
-     sup = 291,
-     inf = 292,
-     infOuEg = 293,
-     SupOuEg = 294,
-     diff = 295,
-     egale = 296,
-     mc_app = 297,
-     par_O = 298,
-     par_F = 299,
-     mc_if = 300,
-     mc_else = 301,
-     mc_for = 302,
-     vrg = 303,
-     mc_2p = 304,
-     mc_while = 305,
-     croch_O = 306,
-     croch_F = 307,
-     tabulation = 308,
-     guillemets = 309,
-     sautdligne = 310
+     mc_aff = 282,
+     plus = 283,
+     minus = 284,
+     mul = 285,
+     division = 286,
+     mc_and = 287,
+     mc_OR = 288,
+     mc_not = 289,
+     sup = 290,
+     inf = 291,
+     infOuEg = 292,
+     SupOuEg = 293,
+     diff = 294,
+     egale = 295,
+     mc_app = 296,
+     par_O = 297,
+     par_F = 298,
+     mc_if = 299,
+     mc_else = 300,
+     mc_for = 301,
+     vrg = 302,
+     mc_2p = 303,
+     mc_while = 304,
+     croch_O = 305,
+     croch_F = 306,
+     tabulation = 307,
+     guillemets = 308,
+     sautdligne = 309
    };
 #endif
 
@@ -102,7 +101,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 9 "syntax.y"
+#line 12 "syntax.y"
 
         int entier;
         char* str;
@@ -112,7 +111,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 116 "syntax.tab.h"
+#line 115 "syntax.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

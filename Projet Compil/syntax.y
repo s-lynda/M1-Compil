@@ -3,8 +3,11 @@
 #include <stdio.h>
 #include<string.h>
 #include<stdlib.h>
-int nb_ligne=1;
-
+extern int nb_ligne;
+int yyparse();
+int yylex();
+int yyerror(char *s);
+int Col=1;
 %}
 %union {
         int entier;
@@ -24,8 +27,7 @@ int nb_ligne=1;
         <str>mc_float 
         <str>mc_bool 
         <str>mc_char
-        <entier>cst
-         mc_aff plus minus mul division
+        mc_aff plus minus mul division
         mc_and  mc_OR mc_not sup inf infOuEg SupOuEg  diff egale mc_app
         par_O  par_F mc_if mc_else mc_for vrg  mc_2p  mc_while
         croch_O  croch_F tabulation guillemets sautdligne
@@ -67,7 +69,12 @@ DEC: TYPE idf LIST_VAR
 ;
 
 // un tableau est reconnue comme type table , pas d'allocation d'espace 
-TAB_DEC: TYPE idf croch_O cst croch_F 
+TAB_DEC: TYPE idf croch_O cst_int croch_F 
+ {if($4<=0)
+        {
+        printf("Erreur Semantique: Taille du tableau doit etre >0");
+        }
+  }
 ;
 
 LIST_VAR: vrg idf LIST_VAR 
@@ -86,8 +93,7 @@ INST : AFFECT
       
 ;
 
-AFFECT :idf mc_aff cst SAUT
-        |AFFECT_ARITHM
+AFFECT :AFFECT_ARITHM
         | idf mc_aff cst_char SAUT // considérer comme une declaration forme 2
         | idf mc_aff cst_bool SAUT
         |AFF_SPECIAL
@@ -160,17 +166,16 @@ AAA : mc_for idf
 ;  
 
 %%        
-int main()
+void main()
 { 
      yyparse();
-     return 1;
+     
 }
-yywrap()
+void yywrap()
 {
-   return 1;
 }
 int yyerror(char *msg)
 {
-  printf("\n   =====> Erreur Syntaxique  \n au niveau la ligne %d et a la colonne  \n",nb_ligne);
+  printf("\n   =====> Erreur Syntaxique  \n au niveau la ligne %d et a la colonne %d \n",nb_ligne,Col);
    return 1;
 }
