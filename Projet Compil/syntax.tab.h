@@ -42,62 +42,78 @@
      mc_import = 258,
      mc_as = 259,
      mc_numpy = 260,
-     mc_cv2 = 261,
-     mc_pil = 262,
-     mc_Img = 263,
-     mc_imgDraw = 264,
-     mc_pilf1 = 265,
-     mc_npf1 = 266,
-     mc_pilf2 = 267,
-     mc_pilf3 = 268,
-     mc_npf2 = 269,
-     mc_npf3 = 270,
-     mc_cv2f1 = 271,
-     mc_cv2f2 = 272,
-     plus = 273,
-     minus = 274,
-     mul = 275,
-     division = 276,
-     mc_and = 277,
-     idf = 278,
-     cst = 279,
-     mc_OR = 280,
-     mc_not = 281,
-     sup = 282,
-     inf = 283,
-     infOuEg = 284,
-     SupOuEg = 285,
-     diff = 286,
-     egale = 287,
-     mc_aff = 288,
-     mc_app = 289,
-     par_O = 290,
-     par_F = 291,
-     mc_if = 292,
-     mc_else = 293,
-     mc_for = 294,
-     mc_in = 295,
-     mc_range = 296,
-     vrg = 297,
-     mc_2p = 298,
-     mc_while = 299,
-     acc_O = 300,
-     acc_F = 301,
-     mc_int = 302,
-     mc_float = 303,
-     mc_bool = 304,
-     mc_char = 305,
-     mc_from = 306,
-     cst_car = 307,
-     cst_bool = 308,
-     tabulation = 309
+     mc_pil = 261,
+     mc_Img = 262,
+     mc_npf1 = 263,
+     mc_npf3 = 264,
+     mc_pilf3 = 265,
+     mc_pilf2 = 266,
+     mc_pilf1 = 267,
+     mc_cv2f1 = 268,
+     mc_cv2f2 = 269,
+     mc_from = 270,
+     mc_range = 271,
+     mc_in = 272,
+     idf = 273,
+     cst_int = 274,
+     cst_reel = 275,
+     cst_char = 276,
+     cst_bool = 277,
+     mc_Int = 278,
+     mc_float = 279,
+     mc_bool = 280,
+     mc_char = 281,
+     cst = 282,
+     mc_aff = 283,
+     plus = 284,
+     minus = 285,
+     mul = 286,
+     division = 287,
+     mc_and = 288,
+     mc_OR = 289,
+     mc_not = 290,
+     sup = 291,
+     inf = 292,
+     infOuEg = 293,
+     SupOuEg = 294,
+     diff = 295,
+     egale = 296,
+     mc_app = 297,
+     par_O = 298,
+     par_F = 299,
+     mc_if = 300,
+     mc_else = 301,
+     mc_for = 302,
+     vrg = 303,
+     mc_2p = 304,
+     mc_while = 305,
+     croch_O = 306,
+     croch_F = 307,
+     tabulation = 308,
+     guillemets = 309,
+     sautdligne = 310
    };
 #endif
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE
+{
+
+/* Line 1676 of yacc.c  */
+#line 9 "syntax.y"
+
+        int entier;
+        char* str;
+        float reel;
+        char* car;
+
+
+
+/* Line 1676 of yacc.c  */
+#line 116 "syntax.tab.h"
+} YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

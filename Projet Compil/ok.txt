@@ -1,5 +1,5 @@
-import numpy  as Np
-import PIL 
-from PIL import Image
-
-
+import numpy
+import numpy 
+import numpy as Np
+for i in range(0,20):
+    X=10
