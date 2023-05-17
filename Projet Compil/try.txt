@@ -6,7 +6,20 @@ bison -v  syntax.y -o  pp -> pour les conflicts
 
 
 
-
+{Int} { 
+        Col=Col+strlen(yytext);
+        yylval.entier=atoi(yytext); 
+        if((yylval.entier>(-32767)) && (yylval.entier<32767))
+        {  
+          printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);
+          return cst_int;
+        }
+        else {
+            printf ("Erreur lexicale: depassement de la taille des entiers a la Ligne %d et a la colonne %d  \n",nb_ligne,Col);
+            
+        }
+       }
+{float} {yylval.reel=atof(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return cst_reel;}
 
 
 

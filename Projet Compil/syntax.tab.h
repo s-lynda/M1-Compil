@@ -77,20 +77,19 @@
      SupOuEg = 293,
      diff = 294,
      egale = 295,
-     mc_app = 296,
-     par_O = 297,
-     par_F = 298,
-     mc_if = 299,
-     mc_else = 300,
-     mc_for = 301,
-     vrg = 302,
-     mc_2p = 303,
-     mc_while = 304,
-     croch_O = 305,
-     croch_F = 306,
-     tabulation = 307,
-     guillemets = 308,
-     sautdligne = 309
+     par_O = 296,
+     par_F = 297,
+     mc_if = 298,
+     mc_else = 299,
+     mc_for = 300,
+     vrg = 301,
+     mc_2p = 302,
+     mc_while = 303,
+     croch_O = 304,
+     croch_F = 305,
+     tabulation = 306,
+     guillemets = 307,
+     sautdligne = 308
    };
 #endif
 
@@ -110,7 +109,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 114 "syntax.tab.h"
+#line 113 "syntax.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

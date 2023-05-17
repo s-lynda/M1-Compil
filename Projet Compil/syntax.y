@@ -27,7 +27,7 @@ int Col=1;
         <str>mc_bool 
         <str>mc_char
         mc_aff plus minus mul division
-        mc_and  mc_OR mc_not sup inf infOuEg SupOuEg  diff egale mc_app
+        mc_and  mc_OR mc_not sup inf infOuEg SupOuEg  diff egale 
         par_O  par_F mc_if mc_else mc_for vrg  mc_2p  mc_while
         croch_O  croch_F tabulation guillemets sautdligne
 
@@ -92,10 +92,10 @@ INST : AFFECT
       
 ;
 
-AFFECT :AFFECT_ARITHM
+AFFECT :AFFECT_ARITHM 
         | idf mc_aff cst_char SAUT // considérer comme une declaration forme 2
         | idf mc_aff cst_bool SAUT
-        |AFF_SPECIAL
+        |AFF_SPECIAL 
 ;
 AFF_SPECIAL: idf mc_aff mc_Img'.'mc_pilf1 PATH SAUT
            | idf mc_aff idf'.'mc_npf1 par_O idf par_F PATH par_O SAUT
