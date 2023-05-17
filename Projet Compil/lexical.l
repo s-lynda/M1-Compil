@@ -15,8 +15,8 @@ Number [0-9]
 Number1 [1-9]
 /* Les types de variables */
 /* Int & float ( les valeurs négatives sont entre parenthèse)*/
-SignedInt  \([+-]{Number1}+\)
-SignedFloat \([+-]({Number1}{Number}*|0)"."{Number}+\)
+SignedInt  "\("[+-]{Number1}+"\)"
+SignedFloat "\("[+-]({Number1}{Number}*|0)"."{Number}+"\)"
 
 UnsignedInt {Number1}{Number}*|0
 UnsignedFloat ({Number1}{Number}*|0)"."{Number}+
