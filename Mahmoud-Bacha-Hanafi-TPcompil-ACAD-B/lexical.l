@@ -87,14 +87,14 @@ comment \#(.*\n)
 				Col = Col + strlen(yytext); return cst_reel;}
 
 
-{char}  { rechercher (yytext,"cst_char","CHAR",0,yytext, 0); yylval.car=strdup(yytext); printf("Ligne %d char reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_car;}
-{boolean} {rechercher(yytext,"cst_bool","BOOLEAN",0,yytext, 0);yylval.car=strdup(yytext); printf("ligne %d : boolean reconnu %s \n",nb_ligne,yytext);Col=Col+strlen(yytext); return cst_bool; }
+{char}  { rechercher (yytext,"cst_char","CHAR",0,yytext, 0); yylval.str=strdup(yytext); printf("Ligne %d char reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_car;}
+{boolean} {rechercher(yytext,"cst_bool","BOOLEAN",0,yytext, 0);yylval.str=strdup(yytext); printf("ligne %d : boolean reconnu %s \n",nb_ligne,yytext);Col=Col+strlen(yytext); return cst_bool; }
 {IDF} {   
 			       Col= Col+ strlen (yytext); 
                    if (yyleng<=8) {   
 				                    rechercher (yytext,"IDF ","",0,"", 0);
 			                        printf("Ligne %d IDF reconnu %s \n" ,nb_ligne, yytext ); 
-                                    yylval.str=strdup(yytext);									
+                                    yylval.str=strdup(yytext);									cst_car
 									return idf;
 							      }
                     else printf ("Erreur lexicale Ligne %d colonne %d , IDF %s trop long   \n", nb_ligne, Col,yytext);

@@ -8,6 +8,8 @@ int yyparse();
 int yylex();
 int yyerror(char *s);
 int Col=1;
+char sauvidf[10];  // save type  ( BOOLEAN , CHAR FLOAT INTEGER ) , pour màj de type idf 
+char sauvval[10];
 %}
 %union {
         int entier;
@@ -63,7 +65,12 @@ LIBRARY: mc_numpy
 List_Dec : DEC SAUT 
 ;
 // declaration du genre : type = idf 
-DEC: TYPE idf LIST_VAR 
+DEC: TYPE idf LIST_VAR { 
+                        
+                        if (doubleDeclaration($2)==0){ Inserer_type($2,sauvidf); }
+                        else{{printf("    >>>>>>> Errreur symantique a la ligne %d colonne %d , DOUBLE DECLARATION de idf %s \n",nb_ligne,Col,$2);}}
+                        }
+
      |TAB_DEC 
 ;
 
@@ -79,10 +86,12 @@ TAB_DEC: TYPE idf croch_O cst_int croch_F
 LIST_VAR: vrg idf LIST_VAR 
         | 
 ;
-TYPE:mc_Int 
-     |mc_float 
-     |mc_bool 
-     |mc_char 
+
+TYPE:       mc_Int {strcpy(sauvidf,"INTEGER");}
+            | mc_float {strcpy(sauvidf,"FLOAT");}
+            | mc_bool {strcpy(sauvidf,"BOOLEAN");}
+            | mc_char {strcpy(sauvidf,"CHAR");}
+
 ;
 /* instruction */
 INST : AFFECT
@@ -97,6 +106,8 @@ AFFECT :AFFECT_ARITHM
         | idf mc_aff cst_bool SAUT
         |AFF_SPECIAL 
 ;
+
+/*a revoir pour les idf */
 AFF_SPECIAL: idf mc_aff mc_Img'.'mc_pilf1 PATH SAUT
            | idf mc_aff idf'.'mc_npf1 par_O idf par_F PATH par_O SAUT
            |idf mc_aff mc_pilf1'.'mc_pilf1 par_O idf par_F'.'mc_pilf3 par_O PATH par_F SAUT
@@ -108,13 +119,16 @@ PATH: idf
      ;
 
 AFFECT_ARITHM : idf mc_aff EXP_ARRITH  SAUT
+    { if (doubleDeclaration($1)==0){ 
+            {printf("\n=======> Errreur symantique a la ligne %d colonne %d , operand %s non declare\n",nb_ligne,Col,$1);}}}
 ;
 
 EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH     
            |EXP_ARRITH division EXP_ARRITH 
            |minus EXP_ARRITH
            |par_O EXP_ARRITH par_O
-           |idf      
+           |idf    { if (doubleDeclaration($1)==0){ 
+            {printf("\n=======> Errreur symantique a la ligne %d colonne %d , operand %s non declare\n",nb_ligne,Col,$1);}}  }   
            |cst_int 
 	   |cst_reel 
 ;
@@ -161,20 +175,23 @@ CCC: BBB vrg EXP_ARRITH
 BBB : AAA mc_in mc_range par_O EXP_ARRITH
      |AAA mc_in  par_O EXP_ARRITH
 ;
-AAA : mc_for idf
+AAA : mc_for idf   { if (doubleDeclaration($2)==0){ 
+            {printf("\n=======> Errreur symantique a la ligne %d colonne %d , operand %s non declare\n",nb_ligne,Col,$2);}}}
 ;  
 
 %%        
-void main()
+main()
 { 
-     yyparse();
-     
+   initialisation();
+   yyparse();
+   afficher();
 }
-void yywrap()
+yywrap()
 {
+   return 1;
 }
 int yyerror(char *msg)
 {
-  printf("\n=====> Erreur Syntaxique  \n au niveau la ligne %d et a la colonne %d \n",nb_ligne,Col);
+  printf("\n   =====> Erreur Syntaxique  \n au niveau la ligne %d et a la colonne %d \n", nb_ligne,Col);
    return 1;
 }

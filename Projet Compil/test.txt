@@ -1,0 +1,8 @@
+import numpy as Np 
+Int Xn 
+if (Xn>0):
+    Xn=2
+
+else :
+    Xn=5
+

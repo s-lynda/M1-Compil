@@ -1,12 +1,14 @@
 %{
 #include <String.h>
-#include <stdio.h>
+#include <stcdio.h>
+#include "TS.h"
 #include "syntax.tab.h"
     /* Définition en langage C*/
 // extern int Col;
 int nb_ligne=1;
 extern YYSTYPE yylval;
 extern int  Col;
+char tmps_signed_numbers[20];
 %}
 /* Définition des regex*/
 letter [a-zA-Z]
@@ -27,95 +29,91 @@ bool true|false
 IDF {letter_Maj}({letter}|{Number})*
 /*Commentaire */
 comment \#.*"\n"
-%%
-import {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_import;}
-as {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_as;}
-numpy {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_numpy;}
-PIL {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pil;}
-Image {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_Img;}
-open {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf1;}
-asarray {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_npf1;}
-save {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf3;}
-fromarray {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_pilf2;}
-from {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_from;}
+%%      
+import {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_import;}
+as {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_as;}
+numpy {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_numpy;}
+PIL {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pil;}
+Image {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_Img;}
+open {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf1;}
+asarray {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_npf1;}
+save {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf3;}
+fromarray {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_pilf2;}
+from {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_from;}
 range {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_range;}
-in {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_in;}
-Int {printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); yylval.str=strdup(yytext); Col=Col+strlen(yytext);return mc_Int; }
-"float" {yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_float;}
-"bool" {yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); Col=Col+strlen(yytext); return mc_bool;}
-"char" {yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); Col=Col+strlen(yytext);return mc_char;}
-"and" {Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);return mc_and;  }
-"or" {Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_OR;  }
-"not" {Col=Col+strlen(yytext); printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_not;  }
-"if" {Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_if;  }
-"else" {Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_else;  }
-"for" {Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_for;  }
-"while" {Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_while;}
-{IDF} {
-        Col=Col+strlen(yytext);
-       if(yyleng<=8)
-       {
-        yylval.str=strdup(yytext); 
-        printf ("ligne %d : IDF  reconnue est %s \n", nb_ligne,yytext);
-        return idf;
-       }
-      else {
-        printf ("Erreur lexicale Ligne %d colonne %d , IDF %s trop long   \n", nb_ligne,Col, yytext);
-      }
-      }
+in {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_in;}
+Int {rechercher(yytext,"Mot cle","",0,"", 1);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); yylval.str=strdup(yytext); Col=Col+strlen(yytext);return mc_Int; }
+"float" {rechercher(yytext,"Mot cle","",0,"", 1);yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_float;}
+"bool" {rechercher(yytext,"Mot cle","",0,"", 1);yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); Col=Col+strlen(yytext); return mc_bool;}
+"char" {rechercher(yytext,"Mot cle","",0,"", 1);yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); Col=Col+strlen(yytext);return mc_char;}
+"and" {rechercher(yytext,"Mot cle","",0,"", 1);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);return mc_and;  }
+"or" {rechercher(yytext,"Mot cle","",0,"", 1);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_OR;  }
+"not" {rechercher(yytext,"Mot cle","",0,"", 1);Col=Col+strlen(yytext); printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_not;  }
+"if" {rechercher(yytext,"Mot cle","",0,"", 1);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_if;  }
+"else" {rechercher(yytext,"Mot cle","",0,"", 1);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_else;  }
+"for" {rechercher(yytext,"Mot cle","",0,"", 1);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_for;  }
+"while" {rechercher(yytext,"Mot cle","",0,"", 1);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_while;}
+{IDF} {   
+			       Col= Col+ strlen (yytext); 
+                   if (yyleng<=8) {   
+				                    rechercher (yytext,"IDF ","",0,"", 0);
+			                        printf("Ligne %d IDF reconnu %s \n" ,nb_ligne, yytext ); 
+                                    yylval.str=strdup(yytext);									
+									return idf;
+							      }
+                    else printf ("Erreur lexicale Ligne %d colonne %d , IDF %s trop long   \n", nb_ligne, Col,yytext);
+ }
 {UnsignedInt} { yylval.entier=atoi(yytext); 
-                Col = Col + strlen(yytext);
-                if(yylval.entier>32767 || yylval.entier<(-32768))
-                {
+                       Col = Col + strlen(yytext);
+                       if(yylval.entier>32767 || yylval.entier<(-32768)){
 						     printf ("Erreur lexicale: depassement de la taille des entiers  a la Ligne %d et a la colonne %d \n", nb_ligne, Col);
-					      }
-					      else 
-                {
-						     printf("Ligne %d integer reconnu %s \n" ,nb_ligne, yytext );   
-                 return cst_int; 
-                }
-}
-{SignedInt} { yylval.entier=atoi(yytext); 
-              Col = Col + strlen(yytext);
-               if(yylval.entier>32767 || yylval.entier<(-32768))
-               {
-						     printf ("Erreur lexicale: depassement de la taille des entiers  a la Ligne %d et a la colonne %d \n", nb_ligne, Col);
-					      }
-					   else 
-             {
-						     printf("Ligne %d  signed integer reconnu %s \n" ,nb_ligne, yytext );   
-                 return cst_int; 
 					   }
-}	
-{UnsignedFloat} { 
-                 yylval.reel=atof(yytext);
-                 printf("Ligne %d  float reconnu %s \n" ,nb_ligne, yytext ); 
-                  Col = Col + strlen(yytext); return cst_reel;
-                }
-{SignedFloat} { 
-				        yylval.reel=atof(yytext); 
-                printf("Ligne %d  signed float reconnu %s \n" ,nb_ligne, yytext ); 
-				        Col = Col + strlen(yytext); return cst_reel;
-              }
-{char} {yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return cst_char;}
-{bool} {yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); Col=Col+strlen(yytext); return cst_bool;}
-"=" { Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return mc_aff;}
-"+" { Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return plus; }
-"-" { Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return minus; }
-"*" {Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return mul;  }
-"/" {Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return division;}
-">"	{Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return sup;  }
-"<"	{Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return inf;  }
-"<=" {Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return infOuEg;  }
-">=" {Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return SupOuEg;  }
-"!=" {Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return diff;  }
-"==" {Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return egale;  }
-"(" {Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return par_O;  }
-")" {Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return par_F;  }
-"," {Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return vrg;  }
-":" {Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return mc_2p;  }
-"[" {Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return croch_O;}
-"]" { Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return croch_F;}
+					   else {
+						     rechercher (yytext,"Cst_entier","INTEGER",atoi(yytext),"", 0);
+						     printf("Ligne %d integer reconnu %s \n" ,nb_ligne, yytext );   return cst_int; 
+					   }
+	}
+{SignedInt} { 		   strcpy(tmps_signed_numbers, substring(yytext,1,strlen(yytext)-1));
+					   yylval.entier=atoi(tmps_signed_numbers); 
+                       Col = Col + strlen(yytext);
+                       if(yylval.entier>32767 || yylval.entier<(-32768)){
+						     printf ("Erreur lexicale: depassement de la taille des entiers  a la Ligne %d et a la colonne %d \n", nb_ligne, Col);
+					   }
+					   else {
+						     rechercher (tmps_signed_numbers,"Cst entier ","INTEGER",atoi(tmps_signed_numbers),"", 0);
+						     printf("Ligne %d  signed integer reconnu %s \n" ,nb_ligne, yytext );   return cst_int; 
+					   }
+	}	
+{UnsignedFloat} { rechercher (yytext,"cst_reel","FLOAT",atof(yytext),"",0); yylval.reel=atof(yytext);printf("Ligne %d  float reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_reel;}
+
+{SignedFloat}  { strcpy(tmps_signed_numbers, substring(yytext,1,strlen(yytext)-1));
+					   yylval.entier=atoi(tmps_signed_numbers); 
+
+				
+				rechercher (tmps_signed_numbers,"Cst reel ","FLOAT",atof(tmps_signed_numbers),"",0);
+				yylval.reel=atof(tmps_signed_numbers); printf("Ligne %d  signed float reconnu %s \n" ,nb_ligne, yytext ); 
+				Col = Col + strlen(yytext); return cst_reel;}
+
+
+{char}  { rechercher (yytext,"cst_char","CHAR",0,yytext, 0); yylval.str=strdup(yytext); printf("Ligne %d char reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_char;}
+{bool} {rechercher(yytext,"cst_bool","BOOLEAN",0,yytext, 0);yylval.str=strdup(yytext); printf("ligne %d : boolean reconnu %s \n",nb_ligne,yytext);Col=Col+strlen(yytext); return cst_bool; }
+"=" {   rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); yylval.str=strdup(yytext);return mc_aff;}
+"+" {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); yylval.str=strdup(yytext);return plus; }
+"-" {   rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); yylval.str=strdup(yytext); return minus; }
+"*" {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); yylval.str=strdup(yytext);return mul;  }
+"/" {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return division;}
+">"	{  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return sup;  }
+"<"	{  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return inf;  }
+"<=" {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return infOuEg;  }
+">=" {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return SupOuEg;  }
+"!=" {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return diff;  }
+"==" {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return egale;  }
+"(" {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return par_O;  }
+")" {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return par_F;  }
+"," {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return vrg;  }
+":" {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return mc_2p;  }
+"[" { rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return croch_O;}
+"]" {  rechercher (yytext,"Separateur","",0,"", 2);Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return croch_F;}
 {comment} {nb_ligne++;}
 [ \t ] { Col = Col + strlen(yytext);}
 "    " {Col = Col + 4; return tabulation;}

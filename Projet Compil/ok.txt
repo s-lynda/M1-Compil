@@ -1,5 +1,0 @@
-import numpy as Np 
-import numpy 
-
-X=10
-F=(-12)
