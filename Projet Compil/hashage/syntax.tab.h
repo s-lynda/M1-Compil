@@ -105,7 +105,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 13 "syntax.y"
+#line 27 "syntax.y"
 
         int entier;
         char* str;

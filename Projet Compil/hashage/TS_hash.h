@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "TS_MS.h"
 #define MAX 1000
 #define MAX_SIZE 1000
 #define HASH_SIZE 40
@@ -18,20 +19,8 @@ typedef struct element {
    char valstring[10]; // for storing CHAR and BOOL values
 } element;
 
-// Structure for keyword and separator entries
-typedef struct elt {
-   char name[20];
-   int state;
-   struct elt* next;
-} elt;
-
 // Hash table for IDF and constant entries
 element* tab[MAX_SIZE];
-
-// Hash tables for keywords and separators
-elt* tabs[HASH_SIZE];
-elt* tabm[HASH_SIZE];
-
 int cpt, cpts, cptm;
 
 // Hash function for IDF and constant entries
@@ -47,20 +36,6 @@ int hash_function(char* key) {
    return hash % MAX_SIZE;
 }
 
-// Hash function for keywords and separators
-int hash_function_keywords(char* key) {
-   int hash = 0;
-   int i = 0;
-
-   while (key[i] != '\0') {
-      hash += key[i];
-      i++;
-   }
-
-   return hash % HASH_SIZE;
-}
-
-
 /***Step 2: Initialisation de l'état des cases des tables des symboles***/
 /*0: la case est libre    1: la case est occupée*/
 
@@ -71,12 +46,7 @@ void initialisation() {
    for (i = 0; i < MAX_SIZE; i++) {
       tab[i] = NULL;
    }
-
-   for (i = 0; i < HASH_SIZE; i++) {
-      tabs[i] = NULL;
-      tabm[i] = NULL;
-   }
-
+   initialisation1();
    cpt = 0;
    cpts = 0;
    cptm = 0;
@@ -95,6 +65,7 @@ void inserer(char entite[], char code[], char type[], float val, char val_string
    new_entry->state = 1;
 
    int hash = hash_function(entite);
+   printf("hassjhhh %d pour %s \n",hash,entite);
 
    // Check if the entry already exists
    element* entry = tab[hash];
@@ -118,70 +89,128 @@ void inserer(char entite[], char code[], char type[], float val, char val_string
    cpt++;
 }
 
-void inserer_keywords(char entite[]) {
-   elt* new_entry = malloc(sizeof(elt));
+// Insertion into the IDF and constant table
+void inserer_sans_verify(char entite[], char code[], char type[], float val, char val_string[], int y) {
+   element* new_entry = malloc(sizeof(element));
    strcpy(new_entry->name, entite);
+   strcpy(new_entry->code, code);
+   strcpy(new_entry->type, type);
+   new_entry->val = val;
+   strcpy(new_entry->valstring, val_string);
    new_entry->state = 1;
 
-   int hash = hash_function_keywords(entite);
+   int hash = hash_function(entite);
+   tab[hash] = new_entry;
 
-   // Check if the entry already exists
-   elt* entry = tabs[hash];
+
+}
+void insererS(char entite[], char code[], char type[], float val, char val_string[], int y) {
+   int hash = hash_function(entite);
+
+   // Recherche de l'entrée dans la table des symboles
+   element* previous_entry = NULL;
+   element* current_entry = tab[hash];
+   while (current_entry != NULL) {
+      if (strcmp(current_entry->name, entite) == 0) {
+         // Entrée trouvée, suppression de l'ancienne valeur
+         if (previous_entry != NULL) {
+            previous_entry->next = current_entry->next;
+         } else {
+            tab[hash] = current_entry->next;
+         }
+         free(current_entry);
+         break;
+      }
+      previous_entry = current_entry;
+      current_entry = current_entry->next;
+   }
+
+   // Insertion de la nouvelle entrée
+   element* new_entry = malloc(sizeof(element));
+   strcpy(new_entry->name, entite);
+   strcpy(new_entry->code, code);
+   strcpy(new_entry->type, type);
+   new_entry->val = val;
+   strcpy(new_entry->valstring, val_string);
+   new_entry->state = 1;
+
+   // Insérer la nouvelle entrée au début de la liste chaînée
+   new_entry->next = tab[hash];
+   tab[hash] = new_entry;
+
+   cpt++;
+}
+
+void insererM(char entite[], char code[], char type[], float val, char val_string[], int y) {
+   int hash = hash_function(entite);
+
+   // Recherche de l'entrée dans la table des symboles
+   element* entry = tab[hash];
    while (entry != NULL) {
       if (strcmp(entry->name, entite) == 0) {
-         // Entry already exists, free the new entry and return
-         free(new_entry);
+         // Entrée trouvée, mise à jour du type
+         strcpy(entry->type, type);
          return;
       }
       entry = entry->next;
    }
 
-   // Insert the new entry at the beginning of the linked list
-   new_entry->next = tabs[hash];
-   tabs[hash] = new_entry;
+   // Si l'entrée n'existe pas, elle est insérée dans la table des symboles
+   element* new_entry = malloc(sizeof(element));
+   strcpy(new_entry->name, entite);
+   strcpy(new_entry->code, code);
+   strcpy(new_entry->type, type);
+   new_entry->val = val;
+   strcpy(new_entry->valstring, val_string);
+   new_entry->state = 1;
 
-   cpts++;
+   // Insérer la nouvelle entrée au début de la liste chaînée
+   new_entry->next = tab[hash];
+   tab[hash] = new_entry;
+
+   cpt++;
 }
 
-// Insertion into the separator table
-void inserer_separators(char entite[]) {
-   elt* new_entry = malloc(sizeof(elt));
-   strcpy(new_entry->name, entite);
-   new_entry->state = 1;
-   int hash = hash_function_keywords(entite);
-
-   // Check if the entry already exists
-   elt* entry = tabm[hash];
-   while (entry != NULL) {
-      if (strcmp(entry->name, entite) == 0) {
-         // Entry already exists, update the type
-        
-         free(new_entry);
-         return;
+void free_hash_table() {
+   // Free the IDF and constant table
+   for (int i = 0; i < MAX_SIZE; i++) {
+      element* entry = tab[i];
+      while (entry != NULL) {
+         element* next = entry->next;
+         free(entry);
+         entry = next;
       }
-      entry = entry->next;
    }
 
-   // Insert the new entry at the beginning of the linked list
-   new_entry->next = tabm[hash];
-   tabm[hash] = new_entry;
+   // Free the keyword table
+   for (int i = 0; i < HASH_SIZE; i++) {
+      elt* entry_kw = tabs[i];
+      while (entry_kw != NULL) {
+         elt* next_kw = entry_kw->next;
+         free(entry_kw);
+         entry_kw = next_kw;
+      }
+   }
 
-   cptm++;
+   // Free the separator table
+   for (int i = 0; i < HASH_SIZE; i++) {
+      elt* entry_sep = tabm[i];
+      while (entry_sep != NULL) {
+         elt* next_sep = entry_sep->next;
+         free(entry_sep);
+         entry_sep = next_sep;
+      }
+   }
 }
-
-
 
 /***Step 5: Recherche d'une entité dans les tables des symboles ***/
-int rechercher(char entite[], char code[], char type[])
-{
+int rechercher(char entite[], char code[], char type[]) {
    int hash = hash_function(entite);
 
    // Search in the IDF and constant table
    element* entry = tab[hash];
-   while (entry != NULL)
-   {
-      if (strcmp(entry->name, entite) == 0)
-      {
+   while (entry != NULL) {
+      if (strcmp(entry->name, entite) == 0) {
          // Entry found, update the values
          strcpy(code, entry->code);
          strcpy(type, entry->type);
@@ -193,12 +222,9 @@ int rechercher(char entite[], char code[], char type[])
    // Search in the keyword table
    hash = hash_function_keywords(entite);
    elt* entry_kw = tabs[hash];
-   while (entry_kw != NULL)
-   {
-      if (strcmp(entry_kw->name, entite) == 0)
-      {
+   while (entry_kw != NULL) {
+      if (strcmp(entry_kw->name, entite) == 0) {
          // Entry found, update the type
-        
          strcpy(code, "");
          return 1;
       }
@@ -208,12 +234,9 @@ int rechercher(char entite[], char code[], char type[])
    // Search in the separator table
    hash = hash_function_keywords(entite);
    elt* entry_sep = tabm[hash];
-   while (entry_sep != NULL)
-   {
-      if (strcmp(entry_sep->name, entite) == 0)
-      {
+   while (entry_sep != NULL) {
+      if (strcmp(entry_sep->name, entite) == 0) {
          // Entry found, update the type
-       
          strcpy(code, "");
          return 1;
       }
@@ -223,75 +246,158 @@ int rechercher(char entite[], char code[], char type[])
    return 0;
 }
 
-// Affichage de la table des IDF et des constantes
-void afficher_table_idf()
-{
-   printf("Table des IDF et des constantes :\n");
-   printf("------------------------------\n");
-   printf("|    Nom    |   Code   |  Type  |\n");
-   printf("------------------------------\n");
-
-   for (int i = 0; i < MAX; i++)
-   {
+void afficher_table_idf1() {
+   for (int i = 0; i < MAX_SIZE; i++) {
       element* entry = tab[i];
-      while (entry != NULL)
-      {
-         printf("| %-9s | %-8s | %-6s |\n", entry->name, entry->code, entry->type);
+      while (entry != NULL) {
+         printf("Name: %s, Type: %s, Value: %f\n", entry->name, entry->type, entry->val);
+         entry = entry->next;
+      }
+   }
+}
+
+// Affichage de la table des IDF et des constantes
+void afficher_table_idf() {
+   printf("Table des IDF et des constantes :\n");
+   printf("-------------------------------------------------------------\n");
+   printf("|    Nom    |   Code      |  Type    |  Val  |  Val_String  |\n");
+   printf("-------------------------------------------------------------\n");
+
+   for (int i = 0; i < MAX_SIZE; i++) {
+      element* entry = tab[i];
+      while (entry != NULL) {
+         printf("| %-10s | %-11s | %-8s | %-5.2f | %-12s |\n", entry->name, entry->code, entry->type, entry->val, entry->valstring);
          entry = entry->next;
       }
    }
 
-   printf("------------------------------\n");
+   printf("-----------------------------------------\n");
 }
 
-// Affichage de la table des mots-clés
-void afficher_table_keywords()
-{
-   printf("Table des mots-clés :\n");
-   printf("---------------------\n");
-   printf("|    Nom    |   Type  |\n");
-   printf("---------------------\n");
+void afficher() {
+   // Afficher les tables des symboles
+   //afficher_table_separators();
+   afficher_table_idf();
+   //afficher_table_keywords();
+   //free_hash_table() ;
+}
 
-   for (int i = 0; i < MAX; i++)
-   {
-      elt* entry = tabs[i];
-      while (entry != NULL)
-      {
-         printf("| %-9s | %-6s |\n", entry->name, "mot cle");
-         entry = entry->next;
+// Verifier si un idf est deja declarer en verifiant son type
+int doubleDeclaration(char idf[]) {
+   int hash = hash_function(idf);
+
+   // Search in the IDF and constant table
+   element* entry = tab[hash];
+   while (entry != NULL) {
+      if (strcmp(entry->name, idf) == 0) {
+         // Entry found, return 0 to indicate double declaration
+         if (strcmp(entry->type, "") == 0) {
+            return 0;
+         }
       }
+      entry = entry->next;
    }
 
-   printf("---------------------\n");
+   // Entry not found, return 1 to indicate no double declaration
+   return 1;
 }
 
+char* get_type(char idf[]) {
+   int hash = hash_function(idf);
 
-// Affichage de la table des séparateurs
-void afficher_table_separators()
-{
-   printf("Table des séparateurs :\n");
-   printf("------------------------\n");
-   printf("|    Nom    |   Type  |\n");
-   printf("------------------------\n");
-
-   for (int i = 0; i < HASH_SIZE; i++)
-   {
-      elt* entry = tabm[i];
-      while (entry != NULL)
-      {
-         printf("| %-9s | %-9s |\n", entry->name, "Separateur");
-         entry = entry->next;
+   // Search in the IDF and constant table
+   element* entry = tab[hash];
+   while (entry != NULL) {
+      if (strcmp(entry->name, idf) == 0) {
+         // Entry found, return the type
+         return entry->type;
       }
+      entry = entry->next;
    }
 
-   printf("------------------------\n");
+   // Entry not found, return NULL
+   return NULL;
 }
 
 
-void afficher()
-{
-// Afficher les tables des symboles
-afficher_table_idf();
-afficher_table_separators();
-afficher_table_keywords();
+
+void modifier_type(char idf[], char new_type[]) {
+   int hash = hash_function(idf);
+
+   // Recherche de l'entrée dans la table des symboles
+   element* entry = tab[hash];
+   while (entry != NULL) {
+      if (strcmp(entry->name, idf) == 0) {
+         // Entrée trouvée, mise à jour du type
+         strcpy(entry->type, new_type);
+         printf("modificatio bien effectuer\n");
+         return;
+      }
+      entry = entry->next;
+   }
+
+   // Si l'entrée n'est pas trouvée, vous pouvez choisir de générer une erreur ou d'ignorer la modification
+   // Selon vos besoins, vous pouvez ajouter ici une logique supplémentaire
+   // par exemple : printf("Erreur : L'entrée '%s' n'a pas été trouvée dans la table des symboles.\n", idf);
 }
+
+
+
+void modifier_val_string(char idf[], char new_val_string[]) {
+   int hash = hash_function(idf);
+
+   // Search for the entry in the IDF and constant table
+   element* entry = tab[hash];
+   while (entry != NULL) {
+      if (strcmp(entry->name, idf) == 0) {
+         // Entry found, update the value string
+         strcpy(entry->valstring, new_val_string);
+         return;
+      }
+      entry = entry->next;
+   }
+}
+
+void supprimer(char entite[]) {
+   printf("je vais suupp %s\n",entite);
+   int hash = hash_function(entite);
+
+   // Vérifier si l'entrée existe déjà
+   element* previous_entry = NULL;
+   element* current_entry = tab[hash];
+   while (current_entry != NULL) {
+      if (strcmp(current_entry->name, entite) == 0) {
+         // Entrée trouvée, suppression de l'entrée de la table
+         if (previous_entry != NULL) {
+            previous_entry->next = current_entry->next;
+         } else {
+            tab[hash] = current_entry->next;
+         }
+         free(current_entry);
+         return;
+      }
+      previous_entry = current_entry;
+      current_entry = current_entry->next;
+   }
+}
+
+
+void SetVal(char* entite, float z) {
+   int hash = hash_function(entite);
+
+   // Search for the entry in the IDF and constant table
+   element* entry = tab[hash];
+   while (entry != NULL) {
+      if (strcmp(entry->name, entite) == 0) {
+         // Entry found, update the value
+         entry->val = z;
+         return;
+      }
+      entry = entry->next;
+   }
+}
+
+
+
+
+

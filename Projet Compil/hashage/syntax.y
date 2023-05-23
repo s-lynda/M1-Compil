@@ -1,7 +1,21 @@
 %{
-#include <stdio.h>
-#include<string.h>
+#include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#define MAX 1000
+#define MAX_SIZE 1000
+#define HASH_SIZE 40
+/*#ifndef SYMBOL_TABLE_H
+#define SYMBOL_TABLE_H
+int doubleDeclaration(char idf[]);
+void modifier_type(char idf[], char type[]);
+void initialisation();
+void afficher();
+
+#endif*/
+#define MAX_SIZE 1000
+
+
 extern int nb_ligne;
 int yyparse();
 int yylex();
@@ -64,7 +78,16 @@ LIBRARY: mc_numpy
 List_Dec : DEC SAUT 
 ;
 // declaration du genre : type = idf 
-DEC: TYPE idf LIST_VAR 
+DEC: TYPE idf LIST_VAR {                      
+                        // Mettre à jour le type dans la structure element
+                        inserer($2,"IDF",sauvidf, 0, "", 0);
+                        /*modifier_type("Xn","lina");*/
+                        afficher_table_separators() ;
+                        afficher_table_idf();
+                        printf("CEST BON \n");
+
+                        }
+                       
 
      |TAB_DEC 
 ;
@@ -77,10 +100,10 @@ LIST_VAR: vrg idf LIST_VAR
         | 
 ;
 
-TYPE:       mc_Int
-            | mc_float 
-            | mc_bool
-            | mc_char
+TYPE:        mc_Int {strcpy(sauvidf,"INTEGER");}
+            | mc_float {strcpy(sauvidf,"FLOAT");}
+            | mc_bool {strcpy(sauvidf,"BOOLEAN");}
+            | mc_char {strcpy(sauvidf,"CHAR");}
 
 ;
 /* instruction */
@@ -92,7 +115,7 @@ INST : AFFECT
 ;
 
 AFFECT :AFFECT_ARITHM 
-        | idf mc_aff cst_char SAUT // considérer comme une declaration forme 2
+        | idf mc_aff cst_char SAUT            
         | idf mc_aff cst_bool SAUT
         |AFF_SPECIAL 
 ;
@@ -116,9 +139,18 @@ EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH
            |EXP_ARRITH division EXP_ARRITH 
            |minus EXP_ARRITH
            |par_O EXP_ARRITH par_O
-           |idf     
-           |cst_int 
-	   |cst_reel 
+           |idf    {
+                 char* typevall = get_type($1);
+                printf("this is type %s pour %s\n", typevall, $1);
+                modifier_type($1,"CHAR");
+               printf("im here\n");
+               char* typeval = get_type($1);
+                printf("this is type %s pour %s\n", typeval, $1);
+   if (strcmp(typeval, "FLOAT") == 0) {
+      printf("Riguel");
+   }    }  
+           |cst_int
+     	  |cst_reel 
 ;
 
 BLOC_INST : tabulation INST BLOC_INST 
@@ -169,16 +201,23 @@ AAA : mc_for idf
 %%        
 int main()
 { 
+   
+ 
    initialisation();
-   yyparse();
-   afficher();
+ 
+// afficher_table_idf();
+  yyparse();   
+  //afficher_table_separators() ;
+  afficher_table_idf();
+   
+   
 }
-yywrap()
-{
-   return 1;
-}
+ yywrap()
+
+{}
 int yyerror(char *msg)
 {
   printf("\n   =====> Erreur Syntaxique  \n au niveau la ligne %d et a la colonne %d \n", nb_ligne,Col);
    return 1;
+
 }

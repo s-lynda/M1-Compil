@@ -1,7 +1,6 @@
-import numpy as Np 
-Int Xn 
-if (Xn>0):
-    Xn=2
+Int Xn
+float A
+float Cn
+Cn = Cn
 
-else :
-    Xn=5
+

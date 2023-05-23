@@ -8,6 +8,7 @@
 int nb_ligne=1;
 extern YYSTYPE yylval;
 extern int  Col;
+
 char tmps_signed_numbers[20];
 %}
 /* Définition des regex*/
@@ -56,7 +57,6 @@ Int {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", 
 {IDF} {   
 			       Col= Col+ strlen (yytext); 
                    if (yyleng<=8) {   
-				                    inserer (yytext,"IDF ","",0,"", 0);
 			                        printf("Ligne %d IDF reconnu %s \n" ,nb_ligne, yytext ); 
                                     yylval.str=strdup(yytext);									
 									return idf;

@@ -210,12 +210,6 @@ for(i=0;i<cpts;i++)
 }
 
 
-
-
-
-
-
-
  int Recherche_position(char entite[])
 		{
 		int i=0;

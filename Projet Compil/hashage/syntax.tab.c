@@ -65,9 +65,23 @@
 /* Line 371 of yacc.c  */
 #line 1 "syntax.y"
 
-#include <stdio.h>
-#include<string.h>
+#include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#define MAX 1000
+#define MAX_SIZE 1000
+#define HASH_SIZE 40
+/*#ifndef SYMBOL_TABLE_H
+#define SYMBOL_TABLE_H
+int doubleDeclaration(char idf[]);
+void modifier_type(char idf[], char type[]);
+void initialisation();
+void afficher();
+
+#endif*/
+#define MAX_SIZE 1000
+
+
 extern int nb_ligne;
 int yyparse();
 int yylex();
@@ -77,7 +91,7 @@ char sauvidf[10];  // save type  ( BOOLEAN , CHAR FLOAT INTEGER ) , pour màj de
 char sauvval[10];
 
 /* Line 371 of yacc.c  */
-#line 81 "syntax.tab.c"
+#line 95 "syntax.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -172,7 +186,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 13 "syntax.y"
+#line 27 "syntax.y"
 
         int entier;
         char* str;
@@ -180,7 +194,7 @@ typedef union YYSTYPE
 
 
 /* Line 387 of yacc.c  */
-#line 184 "syntax.tab.c"
+#line 198 "syntax.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -208,7 +222,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 212 "syntax.tab.c"
+#line 226 "syntax.tab.c"
 
 #ifdef short
 # undef short
@@ -533,14 +547,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    43,    43,    44,    45,    46,    48,    52,    53,    55,
-      56,    57,    60,    61,    64,    67,    69,    73,    76,    77,
-      80,    81,    82,    83,    87,    88,    89,    90,    94,    95,
-      96,    97,   101,   102,   103,   104,   107,   108,   111,   115,
-     116,   117,   118,   119,   120,   121,   124,   125,   129,   132,
-     134,   136,   137,   139,   140,   141,   142,   143,   144,   146,
-     149,   150,   151,   153,   154,   156,   159,   161,   163,   164,
-     166
+       0,    57,    57,    58,    59,    60,    62,    66,    67,    69,
+      70,    71,    74,    75,    78,    81,    92,    96,    99,   100,
+     103,   104,   105,   106,   110,   111,   112,   113,   117,   118,
+     119,   120,   124,   125,   126,   127,   130,   131,   134,   138,
+     139,   140,   141,   142,   152,   153,   156,   157,   161,   164,
+     166,   168,   169,   171,   172,   173,   174,   175,   176,   178,
+     181,   182,   183,   185,   186,   188,   191,   193,   195,   196,
+     198
 };
 #endif
 
@@ -1550,14 +1564,67 @@ yyreduce:
     {
         case 6:
 /* Line 1792 of yacc.c  */
-#line 48 "syntax.y"
+#line 62 "syntax.y"
     {printf("syntaxe correcte"); 
     }
     break;
 
+  case 15:
+/* Line 1792 of yacc.c  */
+#line 81 "syntax.y"
+    {                      
+                        // Mettre à jour le type dans la structure element
+                        inserer((yyvsp[(2) - (3)].str),"IDF",sauvidf, 0, "", 0);
+                        /*modifier_type("Xn","lina");*/
+                        afficher_table_separators() ;
+                        afficher_table_idf();
+                        printf("CEST BON \n");
+
+                        }
+    break;
+
+  case 20:
+/* Line 1792 of yacc.c  */
+#line 103 "syntax.y"
+    {strcpy(sauvidf,"INTEGER");}
+    break;
+
+  case 21:
+/* Line 1792 of yacc.c  */
+#line 104 "syntax.y"
+    {strcpy(sauvidf,"FLOAT");}
+    break;
+
+  case 22:
+/* Line 1792 of yacc.c  */
+#line 105 "syntax.y"
+    {strcpy(sauvidf,"BOOLEAN");}
+    break;
+
+  case 23:
+/* Line 1792 of yacc.c  */
+#line 106 "syntax.y"
+    {strcpy(sauvidf,"CHAR");}
+    break;
+
+  case 43:
+/* Line 1792 of yacc.c  */
+#line 142 "syntax.y"
+    {
+                 char* typevall = get_type((yyvsp[(1) - (1)].str));
+                printf("this is type %s pour %s\n", typevall, (yyvsp[(1) - (1)].str));
+                modifier_type((yyvsp[(1) - (1)].str),"CHAR");
+               printf("im here\n");
+               char* typeval = get_type((yyvsp[(1) - (1)].str));
+                printf("this is type %s pour %s\n", typeval, (yyvsp[(1) - (1)].str));
+   if (strcmp(typeval, "FLOAT") == 0) {
+      printf("Riguel");
+   }    }
+    break;
+
 
 /* Line 1792 of yacc.c  */
-#line 1561 "syntax.tab.c"
+#line 1628 "syntax.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1789,20 +1856,27 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 169 "syntax.y"
+#line 201 "syntax.y"
         
 int main()
 { 
+   
+ 
    initialisation();
-   yyparse();
-   afficher();
+ 
+// afficher_table_idf();
+  yyparse();   
+  //afficher_table_separators() ;
+  afficher_table_idf();
+   
+   
 }
-yywrap()
-{
-   return 1;
-}
+ yywrap()
+
+{}
 int yyerror(char *msg)
 {
   printf("\n   =====> Erreur Syntaxique  \n au niveau la ligne %d et a la colonne %d \n", nb_ligne,Col);
    return 1;
+
 }

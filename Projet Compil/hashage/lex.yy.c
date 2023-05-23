@@ -543,15 +543,16 @@ char *yytext;
 int nb_ligne=1;
 extern YYSTYPE yylval;
 extern int  Col;
+
 char tmps_signed_numbers[20];
-#line 547 "lex.yy.c"
+#line 548 "lex.yy.c"
 /* Définition des regex*/
 /* Les types de variables */
 /* Int & float ( les valeurs négatives sont entre parenthèse)*/
 /*float  (({Number1}{Number}*|0)"."{Number}+)|("\("[+-]({Number1}{Number}*|0)"."{Number}+"\)")*/
 /* Identificateur */
 /*Commentaire */
-#line 554 "lex.yy.c"
+#line 555 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -768,9 +769,9 @@ YY_DECL
 		}
 
 	{
-#line 32 "lexical.l"
+#line 33 "lexical.l"
 
-#line 773 "lex.yy.c"
+#line 774 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -829,126 +830,125 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 33 "lexical.l"
+#line 34 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_import;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 34 "lexical.l"
+#line 35 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_as;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 35 "lexical.l"
+#line 36 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_numpy;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 36 "lexical.l"
+#line 37 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pil;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 37 "lexical.l"
+#line 38 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_Img;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 38 "lexical.l"
+#line 39 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf1;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 39 "lexical.l"
+#line 40 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_npf1;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 40 "lexical.l"
+#line 41 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf3;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 41 "lexical.l"
+#line 42 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_pilf2;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 42 "lexical.l"
+#line 43 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_from;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 43 "lexical.l"
+#line 44 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_range;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 44 "lexical.l"
+#line 45 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_in;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 45 "lexical.l"
+#line 46 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); yylval.str=strdup(yytext); Col=Col+strlen(yytext);return mc_Int; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 46 "lexical.l"
+#line 47 "lexical.l"
 {inserer_keywords(yytext);yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_float;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 47 "lexical.l"
+#line 48 "lexical.l"
 {inserer_keywords(yytext);yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); Col=Col+strlen(yytext); return mc_bool;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 48 "lexical.l"
+#line 49 "lexical.l"
 {inserer_keywords(yytext);yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); Col=Col+strlen(yytext);return mc_char;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 49 "lexical.l"
+#line 50 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);return mc_and;  }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 50 "lexical.l"
+#line 51 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_OR;  }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 51 "lexical.l"
+#line 52 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext); printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_not;  }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 52 "lexical.l"
+#line 53 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_if;  }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 53 "lexical.l"
+#line 54 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_else;  }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 54 "lexical.l"
+#line 55 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_for;  }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 55 "lexical.l"
+#line 56 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_while;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 56 "lexical.l"
+#line 57 "lexical.l"
 {   
 			       Col= Col+ strlen (yytext); 
                    if (yyleng<=8) {   
-				                    inserer (yytext,"IDF ","",0,"", 0);
 			                        printf("Ligne %d IDF reconnu %s \n" ,nb_ligne, yytext ); 
                                     yylval.str=strdup(yytext);									
 									return idf;
