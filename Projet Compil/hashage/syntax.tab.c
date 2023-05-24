@@ -548,13 +548,13 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    57,    57,    58,    59,    60,    62,    66,    67,    69,
-      70,    71,    74,    75,    78,    81,    92,    96,    99,   100,
-     103,   104,   105,   106,   110,   111,   112,   113,   117,   118,
-     119,   120,   124,   125,   126,   127,   130,   131,   134,   138,
-     139,   140,   141,   142,   152,   153,   156,   157,   161,   164,
-     166,   168,   169,   171,   172,   173,   174,   175,   176,   178,
-     181,   182,   183,   185,   186,   188,   191,   193,   195,   196,
-     198
+      70,    71,    74,    75,    78,    81,    92,    96,   104,   105,
+     108,   109,   110,   111,   115,   116,   117,   118,   122,   123,
+     124,   125,   129,   130,   131,   132,   135,   136,   139,   143,
+     144,   145,   146,   147,   148,   149,   152,   153,   157,   160,
+     162,   164,   165,   167,   168,   169,   170,   171,   172,   174,
+     177,   178,   179,   181,   182,   184,   187,   189,   191,   192,
+     194
 };
 #endif
 
@@ -1574,57 +1574,52 @@ yyreduce:
 #line 81 "syntax.y"
     {                      
                         // Mettre à jour le type dans la structure element
-                        inserer((yyvsp[(2) - (3)].str),"IDF",sauvidf, 0, "", 0);
-                        /*modifier_type("Xn","lina");*/
-                        afficher_table_separators() ;
-                        afficher_table_idf();
-                        printf("CEST BON \n");
+                        if (doubleDeclaration((yyvsp[(2) - (3)].str))!=0)
+                        {inserer((yyvsp[(2) - (3)].str),"IDF",sauvidf, 0, "", 0);}
+                        else {
+                                printf("\n =====> Erreur a la ligne %d et colonne %d : idf deja declarer", nb_ligne, Col);
+                        }
 
                         }
     break;
 
+  case 17:
+/* Line 1792 of yacc.c  */
+#line 97 "syntax.y"
+    {   if (doubleDeclaration((yyvsp[(2) - (5)].str))!=0)
+                        {inserer((yyvsp[(2) - (5)].str),"IDF",sauvidf, 0, "", 0);}
+                        else {
+                                printf("\n =====> Erreur a la ligne %d et colonne %d : idf deja declarer", nb_ligne, Col);
+                        }}
+    break;
+
   case 20:
 /* Line 1792 of yacc.c  */
-#line 103 "syntax.y"
+#line 108 "syntax.y"
     {strcpy(sauvidf,"INTEGER");}
     break;
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 104 "syntax.y"
+#line 109 "syntax.y"
     {strcpy(sauvidf,"FLOAT");}
     break;
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 105 "syntax.y"
+#line 110 "syntax.y"
     {strcpy(sauvidf,"BOOLEAN");}
     break;
 
   case 23:
 /* Line 1792 of yacc.c  */
-#line 106 "syntax.y"
+#line 111 "syntax.y"
     {strcpy(sauvidf,"CHAR");}
     break;
 
-  case 43:
-/* Line 1792 of yacc.c  */
-#line 142 "syntax.y"
-    {
-                 char* typevall = get_type((yyvsp[(1) - (1)].str));
-                printf("this is type %s pour %s\n", typevall, (yyvsp[(1) - (1)].str));
-                modifier_type((yyvsp[(1) - (1)].str),"CHAR");
-               printf("im here\n");
-               char* typeval = get_type((yyvsp[(1) - (1)].str));
-                printf("this is type %s pour %s\n", typeval, (yyvsp[(1) - (1)].str));
-   if (strcmp(typeval, "FLOAT") == 0) {
-      printf("Riguel");
-   }    }
-    break;
-
 
 /* Line 1792 of yacc.c  */
-#line 1628 "syntax.tab.c"
+#line 1623 "syntax.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1856,18 +1851,16 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 201 "syntax.y"
+#line 197 "syntax.y"
         
 int main()
 { 
    
  
    initialisation();
- 
-// afficher_table_idf();
-  yyparse();   
-  //afficher_table_separators() ;
-  afficher_table_idf();
+   yyparse(); 
+   afficher();  
+  
    
    
 }

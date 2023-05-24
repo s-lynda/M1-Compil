@@ -276,9 +276,9 @@ void afficher_table_idf() {
 
 void afficher() {
    // Afficher les tables des symboles
-   //afficher_table_separators();
+   afficher_table_separators();
    afficher_table_idf();
-   //afficher_table_keywords();
+   afficher_table_keywords();
    //free_hash_table() ;
 }
 
@@ -290,10 +290,9 @@ int doubleDeclaration(char idf[]) {
    element* entry = tab[hash];
    while (entry != NULL) {
       if (strcmp(entry->name, idf) == 0) {
-         // Entry found, return 0 to indicate double declaration
-         if (strcmp(entry->type, "") == 0) {
+         // Entry found, return 0 to indicate double declaration   
             return 0;
-         }
+         
       }
       entry = entry->next;
    }
@@ -358,28 +357,7 @@ void modifier_val_string(char idf[], char new_val_string[]) {
    }
 }
 
-void supprimer(char entite[]) {
-   printf("je vais suupp %s\n",entite);
-   int hash = hash_function(entite);
 
-   // Vérifier si l'entrée existe déjà
-   element* previous_entry = NULL;
-   element* current_entry = tab[hash];
-   while (current_entry != NULL) {
-      if (strcmp(current_entry->name, entite) == 0) {
-         // Entrée trouvée, suppression de l'entrée de la table
-         if (previous_entry != NULL) {
-            previous_entry->next = current_entry->next;
-         } else {
-            tab[hash] = current_entry->next;
-         }
-         free(current_entry);
-         return;
-      }
-      previous_entry = current_entry;
-      current_entry = current_entry->next;
-   }
-}
 
 
 void SetVal(char* entite, float z) {

@@ -1,6 +1,6 @@
 Int Xn
 float A
-float Cn
+float Cn [5]
 Cn = Cn
 
 

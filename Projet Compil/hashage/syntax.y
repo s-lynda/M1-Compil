@@ -15,7 +15,7 @@ void afficher();
 #endif*/
 #define MAX_SIZE 1000
 
-
+char *chartype;
 extern int nb_ligne;
 int yyparse();
 int yylex();
@@ -69,8 +69,8 @@ SAUT : sautdligne SAUT
 LIB:  mc_import LIBRARY 
       | mc_import LIBRARY mc_as idf 
       | mc_from mc_pil mc_import mc_Img
-
 ;
+
 LIBRARY: mc_numpy
        |mc_pil
 ;
@@ -80,11 +80,11 @@ List_Dec : DEC SAUT
 // declaration du genre : type = idf 
 DEC: TYPE idf LIST_VAR {                      
                         // Mettre à jour le type dans la structure element
-                        inserer($2,"IDF",sauvidf, 0, "", 0);
-                        /*modifier_type("Xn","lina");*/
-                        afficher_table_separators() ;
-                        afficher_table_idf();
-                        printf("CEST BON \n");
+                        if (doubleDeclaration($2)!=0)
+                        {inserer($2,"IDF",sauvidf, 0, "", 0);}
+                        else {
+                                printf("\n =====> Erreur a la ligne %d et colonne %d : idf deja declarer", nb_ligne, Col);
+                        }
 
                         }
                        
@@ -94,6 +94,11 @@ DEC: TYPE idf LIST_VAR {
 
 // un tableau est reconnue comme type table , pas d'allocation d'espace 
 TAB_DEC: TYPE idf croch_O cst_int croch_F 
+                    {   if (doubleDeclaration($2)!=0)
+                        {inserer($2,"IDF",sauvidf, 0, "", 0);}
+                        else {
+                                printf("\n =====> Erreur a la ligne %d et colonne %d : idf deja declarer", nb_ligne, Col);
+                        }}
 ;
 
 LIST_VAR: vrg idf LIST_VAR 
@@ -115,8 +120,31 @@ INST : AFFECT
 ;
 
 AFFECT :AFFECT_ARITHM 
-        | idf mc_aff cst_char SAUT            
+        | idf mc_aff cst_char SAUT  
+        {if doubleDeclaration($1)==0 {
+        // verifier compatibilite de type 
+        chartype=get_type($1);
+        if (strcmp(chartype,"CHAR")!=){
+             printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s  incompatibilite de type ",$1, nb_ligne, Col);
+
+        }
+        }
+        else{
+        printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s non declarer",$1, nb_ligne, Col);
+        }} 
+        // ask linda what is bool exactly          
         | idf mc_aff cst_bool SAUT
+         {if doubleDeclaration($1)==0 {
+        // verifier compatibilite de type 
+        chartype=get_type($1);
+        if (strcmp(chartype,"CHAR")!=){
+             printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s  incompatibilite de type ",$1, nb_ligne, Col);
+
+        }
+        }
+        else{
+        printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s non declarer",$1, nb_ligne, Col);
+        }} 
         |AFF_SPECIAL 
 ;
 
@@ -128,29 +156,28 @@ AFF_SPECIAL: idf mc_aff mc_Img'.'mc_pilf1 PATH SAUT
 ;
 
 PATH: idf 
+     {if doubleDeclaration($1)!=0 {
+        printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s non declarer",$1, nb_ligne, Col);
+     }}
      |guillemets idf guillemets
      ;
 
 AFFECT_ARITHM : idf mc_aff EXP_ARRITH  SAUT
+// verifier son existance le sauvegarder pour faire des  verification plus tard 
+     {if doubleDeclaration($1)!=0 {
+        printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s non declarer",$1, nb_ligne, Col);
+     }else {strcpy(sauvidf_name,$1);}}
+
    
 ;
-
+// donc ici je peux ajouter deux deux seulement ?
 EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH     
            |EXP_ARRITH division EXP_ARRITH 
            |minus EXP_ARRITH
            |par_O EXP_ARRITH par_O
-           |idf    {
-                 char* typevall = get_type($1);
-                printf("this is type %s pour %s\n", typevall, $1);
-                modifier_type($1,"CHAR");
-               printf("im here\n");
-               char* typeval = get_type($1);
-                printf("this is type %s pour %s\n", typeval, $1);
-   if (strcmp(typeval, "FLOAT") == 0) {
-      printf("Riguel");
-   }    }  
+           |idf     
            |cst_int
-     	  |cst_reel 
+     	   |cst_reel 
 ;
 
 BLOC_INST : tabulation INST BLOC_INST 
@@ -204,11 +231,9 @@ int main()
    
  
    initialisation();
- 
-// afficher_table_idf();
-  yyparse();   
-  //afficher_table_separators() ;
-  afficher_table_idf();
+   yyparse(); 
+   afficher();  
+  
    
    
 }
