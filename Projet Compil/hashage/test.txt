@@ -1,6 +1,6 @@
 Int Xn
 float A
-float Cn [5]
-Cn = Cn
+Int Cn
+Cn = 5+1-1
 
 

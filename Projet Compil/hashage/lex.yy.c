@@ -769,7 +769,7 @@ YY_DECL
 		}
 
 	{
-#line 33 "lexical.l"
+#line 32 "lexical.l"
 
 #line 774 "lex.yy.c"
 
@@ -830,122 +830,122 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 34 "lexical.l"
+#line 33 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_import;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 35 "lexical.l"
+#line 34 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_as;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 36 "lexical.l"
+#line 35 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_numpy;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 37 "lexical.l"
+#line 36 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pil;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 38 "lexical.l"
+#line 37 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_Img;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 39 "lexical.l"
+#line 38 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf1;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 40 "lexical.l"
+#line 39 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_npf1;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 41 "lexical.l"
+#line 40 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf3;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 42 "lexical.l"
+#line 41 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_pilf2;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 43 "lexical.l"
+#line 42 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_from;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 44 "lexical.l"
+#line 43 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_range;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 45 "lexical.l"
+#line 44 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_in;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 46 "lexical.l"
+#line 45 "lexical.l"
 {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); yylval.str=strdup(yytext); Col=Col+strlen(yytext);return mc_Int; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 47 "lexical.l"
+#line 46 "lexical.l"
 {inserer_keywords(yytext);yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_float;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 48 "lexical.l"
+#line 47 "lexical.l"
 {inserer_keywords(yytext);yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); Col=Col+strlen(yytext); return mc_bool;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 49 "lexical.l"
+#line 48 "lexical.l"
 {inserer_keywords(yytext);yylval.str=strdup(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); Col=Col+strlen(yytext);return mc_char;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 50 "lexical.l"
+#line 49 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);return mc_and;  }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 51 "lexical.l"
+#line 50 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_OR;  }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 52 "lexical.l"
+#line 51 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext); printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_not;  }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 53 "lexical.l"
+#line 52 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_if;  }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 54 "lexical.l"
+#line 53 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_else;  }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 55 "lexical.l"
+#line 54 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_for;  }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 56 "lexical.l"
+#line 55 "lexical.l"
 {inserer_keywords(yytext);Col=Col+strlen(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext); return mc_while;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 57 "lexical.l"
+#line 56 "lexical.l"
 {   
 			       Col= Col+ strlen (yytext); 
                    if (yyleng<=8) {   
@@ -958,7 +958,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 66 "lexical.l"
+#line 65 "lexical.l"
 { yylval.entier=atoi(yytext); 
                        Col = Col + strlen(yytext);
                        if(yylval.entier>32767 || yylval.entier<(-32768)){
@@ -972,7 +972,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 76 "lexical.l"
+#line 75 "lexical.l"
 { 		  
 					   yylval.entier=atoi(tmps_signed_numbers); 
                        Col = Col + strlen(yytext);
@@ -987,12 +987,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 87 "lexical.l"
+#line 86 "lexical.l"
 { inserer(yytext,"cst_reel","FLOAT",atof(yytext),"",0); yylval.reel=atof(yytext);printf("Ligne %d  float reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_reel;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 88 "lexical.l"
+#line 87 "lexical.l"
 { 
 				yylval.entier=atoi(tmps_signed_numbers); 				
 				yylval.reel=atof(tmps_signed_numbers); printf("Ligne %d  signed float reconnu %s \n" ,nb_ligne, yytext ); 
@@ -1001,129 +1001,129 @@ YY_RULE_SETUP
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 92 "lexical.l"
+#line 91 "lexical.l"
 { inserer (yytext,"cst_char","CHAR",0,yytext, 0); yylval.str=strdup(yytext); printf("Ligne %d char reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_char;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 93 "lexical.l"
+#line 92 "lexical.l"
 {inserer(yytext,"cst_bool","BOOLEAN",0,yytext, 0);yylval.str=strdup(yytext); printf("ligne %d : boolean reconnu %s \n",nb_ligne,yytext);Col=Col+strlen(yytext); return cst_bool; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 94 "lexical.l"
+#line 93 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); yylval.str=strdup(yytext);return mc_aff;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 95 "lexical.l"
+#line 94 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); yylval.str=strdup(yytext);return plus; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 96 "lexical.l"
+#line 95 "lexical.l"
 { inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); yylval.str=strdup(yytext); return minus; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 97 "lexical.l"
+#line 96 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); yylval.str=strdup(yytext);return mul;  }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 98 "lexical.l"
+#line 97 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return division;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 99 "lexical.l"
+#line 98 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return sup;  }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 100 "lexical.l"
+#line 99 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return inf;  }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 101 "lexical.l"
+#line 100 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return infOuEg;  }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 102 "lexical.l"
+#line 101 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return SupOuEg;  }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 103 "lexical.l"
+#line 102 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return diff;  }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 104 "lexical.l"
+#line 103 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return egale;  }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 105 "lexical.l"
+#line 104 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return par_O;  }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 106 "lexical.l"
+#line 105 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return par_F;  }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 107 "lexical.l"
+#line 106 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return vrg;  }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 108 "lexical.l"
+#line 107 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return mc_2p;  }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 109 "lexical.l"
+#line 108 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return croch_O;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 110 "lexical.l"
+#line 109 "lexical.l"
 {inserer_separators(yytext);Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return croch_F;}
 	YY_BREAK
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
-#line 111 "lexical.l"
+#line 110 "lexical.l"
 {nb_ligne++;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 112 "lexical.l"
+#line 111 "lexical.l"
 { Col = Col + strlen(yytext);}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 113 "lexical.l"
+#line 112 "lexical.l"
 {Col = Col + 4; return tabulation;}
 	YY_BREAK
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 114 "lexical.l"
+#line 113 "lexical.l"
 { nb_ligne++;Col = 1; return sautdligne;}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 115 "lexical.l"
+#line 114 "lexical.l"
 printf("Erreur lexicale ligne %d colonne %d sur l'entite %s\n",nb_ligne,Col,yytext);
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 116 "lexical.l"
+#line 115 "lexical.l"
 ECHO;
 	YY_BREAK
 #line 1129 "lex.yy.c"
@@ -2131,6 +2131,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 116 "lexical.l"
+#line 115 "lexical.l"
 
 

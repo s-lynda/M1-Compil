@@ -2,7 +2,6 @@
 #include<stdlib.h>
 #include<string.h>
 
-
 //déclaration de la Pile CETTE PILE EST POUR LE TRAITEMENT DES EXPRESSION ARITHMETIQUE
 typedef float Telm;
 typedef struct EPile* Pile;

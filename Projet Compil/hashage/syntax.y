@@ -2,27 +2,38 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include"pile.h"
+#include"quadruplets.h"
 #define MAX 1000
 #define MAX_SIZE 1000
 #define HASH_SIZE 40
-/*#ifndef SYMBOL_TABLE_H
+
+#ifndef SYMBOL_TABLE_H
 #define SYMBOL_TABLE_H
 int doubleDeclaration(char idf[]);
 void modifier_type(char idf[], char type[]);
+void set_val_string(char idf[], char type[]);
+void inserer(char entite[], char code[], char type[], float val, char val_string[], int y) ;
 void initialisation();
 void afficher();
+void SetVal(char entite[], float z);
+char* get_type(char idf[]);
+#endif
 
-#endif*/
 #define MAX_SIZE 1000
-
-char *chartype;
 extern int nb_ligne;
-int yyparse();
+float tmp;
+int yyparse(); 
 int yylex();
 int yyerror(char *s);
 int Col=1;
 char sauvidf[10];  // save type  ( BOOLEAN , CHAR FLOAT INTEGER ) , pour màj de type idf 
 char sauvval[10];
+char sauvidf_name[10];
+int qc = 0;
+float op1,op2; // gerer les exp_arthimetique pour maj de idf et test conditions 
+char* chartype;
+int quadindex1 ,quadindex2;
 %}
 %union {
         int entier;
@@ -121,30 +132,43 @@ INST : AFFECT
 
 AFFECT :AFFECT_ARITHM 
         | idf mc_aff cst_char SAUT  
-        {if doubleDeclaration($1)==0 {
+        {if (doubleDeclaration($1)==0) {
         // verifier compatibilite de type 
         chartype=get_type($1);
-        if (strcmp(chartype,"CHAR")!=){
-             printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s  incompatibilite de type ",$1, nb_ligne, Col);
+        if (strcmp(chartype,"CHAR")!=0){
+             printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s  incompatibilite de type ", nb_ligne, Col,$1);
 
+        }
+        else{   // deja declarer je maj valchar
+               set_val_string($1,$3);
+                quadruplet("=",$3,"",$1);
         }
         }
         else{
-        printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s non declarer",$1, nb_ligne, Col);
+            // pas declarer je l'insere
+            inserer($1,"IDF","CHAR", 0, $3, 0);
+            quadruplet("=",$3,"",$1);
+
         }} 
+
         // ask linda what is bool exactly          
         | idf mc_aff cst_bool SAUT
-         {if doubleDeclaration($1)==0 {
+           {if (doubleDeclaration($1)==0) {
         // verifier compatibilite de type 
         chartype=get_type($1);
-        if (strcmp(chartype,"CHAR")!=){
-             printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s  incompatibilite de type ",$1, nb_ligne, Col);
+        if (strcmp(chartype,"BOOL")!=0){
+             printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s  incompatibilite de type ", nb_ligne, Col,$1);
 
+        }
+        else{   // deja declarer je maj valchar
+               set_val_string($1,$3);
         }
         }
         else{
-        printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s non declarer",$1, nb_ligne, Col);
-        }} 
+            // pas declarer je l'insere
+            inserer($1,"IDF","BOOL", 0, $3, 0);
+
+        }}   
         |AFF_SPECIAL 
 ;
 
@@ -156,28 +180,83 @@ AFF_SPECIAL: idf mc_aff mc_Img'.'mc_pilf1 PATH SAUT
 ;
 
 PATH: idf 
-     {if doubleDeclaration($1)!=0 {
-        printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s non declarer",$1, nb_ligne, Col);
+     {if (doubleDeclaration($1)!=0) {
+        printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s non declarer", nb_ligne, Col,$1);
      }}
      |guillemets idf guillemets
      ;
+AFFECT_ARITHM : idf mc_aff EXP_ARRITH  SAUT 
+{        tmp=Depiler();
+         chartype=get_type($1);
+         if(strcmp(chartype,"CHAR")==0){
+               printf("    >>>>>>> Erreur semantique ligne %d colonne %d INCOMPATIBILITE DE TYPE , idf %s est un caractere , ne peut pas recevoir une valeure numerique \n",nb_ligne,Col,$1);}
+         else{
+               if(strcmp(chartype,"BOOLEAN")==0){
+               printf("    >>>>>>> Erreur semantique ligne %d colonne %d INCOMPATIBILITE DE TYPE , idf %s est un BOOLEAN , ne peut pas recevoir une valeure numerique \n",nb_ligne,Col,$1);}
+               else {
+                SetVal($1,tmp);
+                ajout_quad_affect_val($1,&tmp);
+                if(Is_int(&tmp)==1)
+               {
+                  printf("\n its an int ");
+                  modifier_type($1,"INTEGER");
+                  
+               }else{
+                  printf("its a float");
+                  modifier_type($1,"FLOAT");
+                  }
+             }
+}}
 
-AFFECT_ARITHM : idf mc_aff EXP_ARRITH  SAUT
-// verifier son existance le sauvegarder pour faire des  verification plus tard 
-     {if doubleDeclaration($1)!=0 {
-        printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s non declarer",$1, nb_ligne, Col);
-     }else {strcpy(sauvidf_name,$1);}}
 
-   
-;
+
 // donc ici je peux ajouter deux deux seulement ?
 EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH     
-           |EXP_ARRITH division EXP_ARRITH 
+         {
+            op2=Depiler();op1=Depiler(); tmp = op1+op2; Empiler(tmp);
+
+            ajout_quad_opbinaire('+',&op1,&op2);
+            
+         }
+	 |EXP_ARRITH minus EXP_ARRITH   
+          {
+            op2=Depiler();op1=Depiler(); tmp = op1-op2; Empiler(tmp);
+            ajout_quad_opbinaire('-',&op1,&op2);
+
+          }
+	  |EXP_ARRITH mul EXP_ARRITH 
+          {
+            op2=Depiler();op1=Depiler(); tmp = op1*op2; Empiler(tmp);
+            ajout_quad_opbinaire('*',&op1,&op2);
+          } 
+          |EXP_ARRITH division EXP_ARRITH 
+            {        
+             op2=Depiler();op1=Depiler();
+             if(op2==0){
+		printf ("    >>>>>>> Erreur semantique ligne %d colonne %d DIVISION PAR 0 \n",nb_ligne,Col);
+			     }else{
+
+                tmp = op1/op2; Empiler(tmp);
+                ajout_quad_opbinaire('/',&op1,&op2);
+
+      
+           }}
            |minus EXP_ARRITH
+           {
+            op1=Depiler();tmp= -op1; Empiler(tmp);
+            ajout_quad_opunaire(&op1);
+            }
            |par_O EXP_ARRITH par_O
-           |idf     
-           |cst_int
-     	   |cst_reel 
+
+           |idf             
+            // idf1 = idf2 , on doit tester si idf2 existeait deja !        
+            { if (doubleDeclaration($1)!=0){ 
+            {printf("\n=======> Errreur symantique a la ligne %d colonne %d , operand %s non declare\n",nb_ligne,Col,$1);}}
+            else{
+            get_val_float($1,&tmp);
+            Empiler(tmp);}} 
+           |cst_int {Empiler($1);}
+     	   |cst_reel { Empiler($1);}
 ;
 
 BLOC_INST : tabulation INST BLOC_INST 
@@ -185,12 +264,26 @@ BLOC_INST : tabulation INST BLOC_INST
 ;
 
 // Instruction IF ELSE
-IF_ELSE :  B BLOC_INST 
+IF_ELSE :  B BLOC_INST {
+		sprintf(sauvindex,"%d",qc);
+		maj_quad(quadindex2,1,sauvindex);
+
+}
 ; 
 
 B : A BLOC_INST mc_else mc_2p SAUT
+{       quadindex2=qc;
+	quadruplet("BR","","","");
+	sprintf(sauvindex,"%d",qc);
+	maj_quad(quadindex1,1,sauvindex);}
 ; 
 A : mc_if par_O COND par_F mc_2p SAUT
+ {
+        tmp=Depiler();
+	ajout_quad_affect_val("tmp_cond",&tmp);
+	quadindex1=qc;
+	quadruplet(quad1 ,"","","tmp_cond");
+}
 ;
 COND : EXP_LOGIQUE
       |EXP_COMPAR
@@ -232,12 +325,14 @@ int main()
  
    initialisation();
    yyparse(); 
+   afficher_qdr();
    afficher();  
+  
   
    
    
 }
- yywrap()
+int yywrap()
 
 {}
 int yyerror(char *msg)

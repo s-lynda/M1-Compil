@@ -163,7 +163,7 @@ AFFECT :    idf affec
                printf("    >>>>>>> Erreur semantique ligne %d colonne %d   idf %s n'existe pas \n",semligne,semcol,$3);
             }else{
                get_type_of_idftation idf SAUT
-             {($3,sauvidf);
+               {($3,sauvidf);
                get_type_of_idf($1,sauvval);
                if(type_compatible(sauvval,sauvidf)==0){
                   printf("    >>>>>>> Erreur semantique ligne %d colonne %d INCOMPATIBILITE DE TYPE , %s est %s , ne peut pas recevoir %s \n",semligne,semcol,$1,sauvval,sauvidf);
@@ -237,7 +237,7 @@ AFFECT :    idf affec
 
 
 // fonction Is_int test si la valeur retourne par ex_arth est int ou float 
-
+//here les arithmetique 
 AFFECT_ARITHM : idf affectation EXP_ARRITH  SAUT {   
 
             tmp=Depiler();
@@ -282,8 +282,6 @@ AFFECT_ARITHM : idf affectation EXP_ARRITH  SAUT {
 
 EXP_ARRITH:
 
-          
-
 			EXP_ARRITH addition EXP_ARRITH     
          {
             op2=Depiler();op1=Depiler(); tmp = op1+op2; Empiler(tmp);
@@ -307,7 +305,7 @@ EXP_ARRITH:
 			|EXP_ARRITH division EXP_ARRITH 
            {
               
-              op2=Depiler();op1=Depiler();
+             op2=Depiler();op1=Depiler();
              if(op2==0){
 				    printf ("    >>>>>>> Erreur semantique ligne %d colonne %d DIVISION PAR 0 \n",semligne,semcol);
 			     }else{
@@ -334,7 +332,7 @@ EXP_ARRITH:
             {printf("\n=======> Errreur symantique a la ligne %d colonne %d , operand %s non declare\n",semligne,semcol,$1);}}
             else{
             get_value_of_idf($1,&tmp);
-             Empiler(tmp);}}
+            Empiler(tmp);}}
 
 
 			|cst_int  {Empiler($1);}
@@ -470,6 +468,7 @@ WHILE : BB BLOC_INST  {
    
 
 };
+
 BB: AA COND parenthese_ferm deux_Point SAUT {
 	tmp=Depiler();
 	ajout_quad_affect_val("tmp_cond",&tmp);
@@ -480,6 +479,7 @@ BB: AA COND parenthese_ferm deux_Point SAUT {
 	quadindex1 = qc;
 	
  }
+
 
 
 /*
@@ -495,10 +495,7 @@ FOR_RANGE :CCC parenthese_ferm deux_Point SAUT BLOC_INST{
 	sprintf(quad2,"%d",quadindex1);
 	quadruplet("BR",quad2,"","");
 	sprintf(quad2,"%d",qc);
-
 	maj_quad(quadindex1,1,quad2);
-	
-	
 };
 
 CCC: BBB virgule EXP_ARRITH {

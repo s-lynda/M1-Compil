@@ -65,7 +65,6 @@ void inserer(char entite[], char code[], char type[], float val, char val_string
    new_entry->state = 1;
 
    int hash = hash_function(entite);
-   printf("hassjhhh %d pour %s \n",hash,entite);
 
    // Check if the entry already exists
    element* entry = tab[hash];
@@ -318,6 +317,22 @@ char* get_type(char idf[]) {
    return NULL;
 }
 
+void get_val_float(char idf[],float *ttmp) {
+   int hash = hash_function(idf);
+
+   // Search for the entry in the IDF and constant table
+   element* entry = tab[hash];
+   while (entry != NULL) {
+      if (strcmp(entry->name, idf) == 0) {
+         // Entry found, return the float value
+          *ttmp=entry->val;
+      }
+      entry = entry->next;
+   }
+
+   // Entry not found, return a default value or handle the case appropriately
+   // For example, you can return 0.0 or throw an error.
+   }
 
 
 void modifier_type(char idf[], char new_type[]) {
@@ -342,7 +357,7 @@ void modifier_type(char idf[], char new_type[]) {
 
 
 
-void modifier_val_string(char idf[], char new_val_string[]) {
+void set_val_string(char idf[], char new_val_string[]) {
    int hash = hash_function(idf);
 
    // Search for the entry in the IDF and constant table
@@ -360,7 +375,7 @@ void modifier_val_string(char idf[], char new_val_string[]) {
 
 
 
-void SetVal(char* entite, float z) {
+void SetVal(char entite[], float z) {
    int hash = hash_function(entite);
 
    // Search for the entry in the IDF and constant table
@@ -373,6 +388,17 @@ void SetVal(char* entite, float z) {
       }
       entry = entry->next;
    }
+}
+
+ int Is_int(float *N)
+{
+    int X = *N;
+
+    float temp2 = *N - X;
+    if (temp2 != 0) {
+        return 0;
+    }
+    return 1;
 }
 
 

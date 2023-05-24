@@ -20,7 +20,6 @@ Number1 [1-9]
 /* Int & float ( les valeurs négatives sont entre parenthèse)*/
 SignedInt  "\("[+-]{Number1}+"\)"
 SignedFloat "\("[+-]({Number1}{Number}*|0)"."{Number}+"\)"
-
 UnsignedInt {Number1}{Number}*|0
 UnsignedFloat ({Number1}{Number}*|0)"."{Number}+
 /*float  (({Number1}{Number}*|0)"."{Number}+)|("\("[+-]({Number1}{Number}*|0)"."{Number}+"\)")*/
