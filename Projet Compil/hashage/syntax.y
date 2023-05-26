@@ -30,6 +30,9 @@ int Col=1;
 char sauvidf[10];  // save type  ( BOOLEAN , CHAR FLOAT INTEGER ) , pour màj de type idf 
 char sauvval[10];
 char sauvidf_name[10];
+char sauvindex[4];
+char quad1[10]; 
+char quad2[10];
 int qc = 0;
 float op1,op2; // gerer les exp_arthimetique pour maj de idf et test conditions 
 char* chartype;
@@ -288,12 +291,37 @@ A : mc_if par_O COND par_F mc_2p SAUT
 COND : EXP_LOGIQUE
       |EXP_COMPAR
 ;
-EXP_COMPAR:EXP_ARRITH egale EXP_ARRITH
+EXP_COMPAR: EXP_ARRITH egale EXP_ARRITH
+	   {
+		strcpy(quad1,"BNZ");
+		op2=Depiler();op1=Depiler(); tmp=(op1 == op2); Empiler(tmp);
+	   }
 	   |EXP_ARRITH diff EXP_ARRITH
+	   {
+	   strcpy(quad1,"BZ");
+		op2=Depiler();op1=Depiler(); tmp=(op1 != op2); Empiler(tmp);
+	   }
 	   |EXP_ARRITH inf EXP_ARRITH
+	   {
+		{
+		strcpy(quad1,"BGE");
+		op2=Depiler();op1=Depiler(); tmp=(op1 < op2); Empiler(tmp);
+	   }
+	   }
 	   |EXP_ARRITH infOuEg EXP_ARRITH
+	   {strcpy(quad1,"BG");
+		op2=Depiler();op1=Depiler(); tmp=(op1 <= op2); Empiler(tmp);
+		}
 	   |EXP_ARRITH sup EXP_ARRITH
-           |EXP_ARRITH SupOuEg EXP_ARRITH
+	   {
+		strcpy(quad1,"BLE");
+		op2=Depiler();op1=Depiler(); tmp=(op1 > op2); Empiler(tmp);
+	   }
+	   |EXP_ARRITH SupOuEg EXP_ARRITH {
+		strcpy(quad1,"BL");
+		op2=Depiler();op1=Depiler(); tmp=(op1 >= op2); Empiler(tmp);
+		
+	   };
 ;
 EXP_LOGIQUE: par_O EXP_COMPAR par_F OP_LOG par_O EXP_COMPAR par_F
 ;
@@ -302,21 +330,81 @@ OP_LOG : mc_and
 	| mc_not
         | mc_OR
 ;
-WHILE : BB BLOC_INST ;
+WHILE : BB BLOC_INST{
+	sprintf(sauvindex,"%d",quadindex1);
+	quadruplet("BR",sauvindex,"","");
+	sprintf(sauvindex,"%d",qc);
+	maj_quad(quadindex2,1,sauvindex);
+   
+
+};
+ 
 BB: AA COND par_F mc_2p SAUT
-;
+{
+	tmp=Depiler();
+	ajout_quad_affect_val("tmp_cond",&tmp);
+	quadindex2=qc;
+	quadruplet(quad1 ,"","","tmp_cond");
+};
+
 AA : mc_while par_O
+{
+	quadindex1 = qc;
+	
+ }
 ;
 
 FOR_RANGE :CCC par_F mc_2p SAUT BLOC_INST
-;
-CCC: BBB vrg EXP_ARRITH 
-;
-BBB : AAA mc_in mc_range par_O EXP_ARRITH
+{
+	inc_val_idf(sauvidf);
+        quadruplet("+",sauvidf,"1",sauvidf);
+	sprintf(quad2,"%d",quadindex1);
+	quadruplet("BR",quad2,"","");
+	sprintf(quad2,"%d",qc);
+	maj_quad(quadindex1,1,quad2);
+};
+CCC: BBB vrg EXP_ARRITH  {
+
+	op2=Depiler();
+	if(Is_int(&op2)==0){
+		printf("\n=======> Errreur symantique a la ligne %d colonne %d ,  %f n'est pas INT \n",nb_ligne,Col,tmp); return 1;
+
+	}else{
+
+		quadindex1=qc;
+		quadruplet("BG","","","tmp_cond");
+	}
+};
+
+BBB : AAA mc_in mc_range par_O EXP_ARRITH 
+ {
+	op1=Depiler();
+	if(Is_int(&op1)==0){
+		printf("\n=======> Errreur symantique a la ligne %d colonne %d ,  %f n'est pas INT \n",nb_ligne,Col,tmp);return 1;
+
+	}else{
+		SetVal(sauvidf,tmp);
+	}
+};
      |AAA mc_in  par_O EXP_ARRITH
 ;
 AAA : mc_for idf
-;  
+{
+	if(doubleDeclaration($2)==0){
+		modifier_type($2,"INTEGER");
+		strcpy(sauvidf,$2);
+
+		}else{
+		chartype=get_type($2);
+		if(strcmp(chartype,"INTEGER")==0){
+			strcpy(sauvidf,$2);
+
+		}else{
+			printf("\n=======> Errreur symantique a la ligne %d colonne %d , idf %s n'est pas INT \n",nb_ligne,Col,$2);return 1;
+
+		
+	}}
+};
 
 %%        
 int main()

@@ -11,7 +11,7 @@ typedef struct quad {
 } quad;
 
 quad* head = NULL; // Pointeur vers la tête de la liste chaînée
-int qc = 0; // Compteur de quadruplets
+extern int qc; // Compteur de quadruplets
 
 void quadruplet(char opr[], char op1[], char op2[], char res[]) {
     quad* new_quad = (quad*)malloc(sizeof(quad));

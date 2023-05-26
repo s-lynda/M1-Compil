@@ -401,6 +401,13 @@ void SetVal(char entite[], float z) {
     return 1;
 }
 
+void inc_val_idf (char entite[]){
+	float old;
+	get_val_float(entite,&old);
+	old++;
+	SetVal(entite,old);
+}
+
 
 
 

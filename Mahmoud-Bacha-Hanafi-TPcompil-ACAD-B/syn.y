@@ -510,7 +510,7 @@ CCC: BBB virgule EXP_ARRITH {
 		quadruplet("BG","","","tmp_cond");
 	}
 };
-BBB : AAA mc_in mc_range parenthese_ouvr EXP_ARRITH{
+BBB : AAA mc_in mc_range parenthese_ouvr EXP_ARRITH {
 	op1=Depiler();
 	if(Is_int(&op1)==0){
 		printf("\n=======> Errreur symantique a la ligne %d colonne %d ,  %f n'est pas INT \n",semligne,semcol,tmp);return 1;
