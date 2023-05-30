@@ -1,0 +1,13 @@
+from PIL import Image
+import numpy as Np
+
+# On charge l'image et on la transforme en tableau contenant les couleurs
+Imageen = Image.open("Img1")
+Image = Np.asarray(Imageen)
+
+# Partie à compléter
+ImageSortie = 255 - Image
+
+# On sauvegarde les images pour pouvoir les afficher
+Image.fromarray(Image).save("Imageentree.png")
+Image.fromarray(Image_sortie).save("Imagesortie")

@@ -1,6 +1,28 @@
-Int Xn
-float A
-Int Cn
-Cn = 5+1-1
+#Lynda hey 
+#Int Xc
+#Xc=2
+#Xm=4.355555555
+#K=(-788)
+#U=(+2.233)
+#Int X,Y,Z,F
+#char T
+#O='k'
 
+#bool G
+#H=true
+#float A[20]
+#Z=(-23459909)
+if(Aa>Ab):
+    Cc=E+2.6
+    HH=HH+2
+else: 
+    EE=ER+55
+    CC=GHGH/2
 
+X=X+2
+A=(X+7+B)/(5.3-(-2))
+R=(A+B)*(C+D)
+Y=(E+C-D)/(2/T)+4
+A=(A+2)+Z
+G=(2*4)+5
+A=(X+7+B)/(5.3-(-2))

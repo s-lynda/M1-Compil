@@ -326,12 +326,12 @@ EXP_ARRITH:
 
          |idf      
 
-         // idf1 = idf2 , on doit tester si idf2 existeait deja ! 
-         
-          { if (doubleDeclaration($1)==0){ 
+         // idf1 = idf2 , on doit tester si idf2 existeait deja !        
+           { if (doubleDeclaration($1)==0){ 
             {printf("\n=======> Errreur symantique a la ligne %d colonne %d , operand %s non declare\n",semligne,semcol,$1);}}
             else{
             get_value_of_idf($1,&tmp);
+            printf("this is the value of idf %s \n",tmp);
             Empiler(tmp);}}
 
 
@@ -475,7 +475,8 @@ BB: AA COND parenthese_ferm deux_Point SAUT {
 	quadindex2=qc;
 	quadruplet(quad1 ,"","","tmp_cond");
 };
- AA : mc_while parenthese_ouvr {
+
+AA : mc_while parenthese_ouvr {
 	quadindex1 = qc;
 	
  }

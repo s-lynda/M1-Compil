@@ -3,22 +3,23 @@
 #include<stdlib.h>
 #include<string.h>
 #include"pile.h"
-#include"quadruplets.h"
+//#include "opt.h"
+#include "quadruplets.h"
 #define MAX 1000
 #define MAX_SIZE 1000
 #define HASH_SIZE 40
 
-#ifndef SYMBOL_TABLE_H
-#define SYMBOL_TABLE_H
-int doubleDeclaration(char idf[]);
-void modifier_type(char idf[], char type[]);
-void set_val_string(char idf[], char type[]);
-void inserer(char entite[], char code[], char type[], float val, char val_string[], int y) ;
-void initialisation();
-void afficher();
-void SetVal(char entite[], float z);
-char* get_type(char idf[]);
-#endif
+// #ifndef SYMBOL_TABLE_H
+// #define SYMBOL_TABLE_H
+// int doubleDeclaration(char idf[]);
+// void modifier_type(char idf[], char type[]);
+// void set_val_string(char idf[], char type[]);
+// void inserer(char entite[], char code[], char type[], float val, char val_string[], int y) ;
+// void initialisation();
+// void afficher();
+// void SetVal(char entite[], float z);
+// char* get_type(char idf[]);
+// #endif
 
 #define MAX_SIZE 1000
 extern int nb_ligne;
@@ -29,7 +30,6 @@ int yyerror(char *s);
 int Col=1;
 char sauvidf[10];  // save type  ( BOOLEAN , CHAR FLOAT INTEGER ) , pour màj de type idf 
 char sauvval[10];
-char sauvidf_name[10];
 char sauvindex[4];
 char quad1[10]; 
 char quad2[10];
@@ -116,6 +116,9 @@ TAB_DEC: TYPE idf croch_O cst_int croch_F
 ;
 
 LIST_VAR: vrg idf LIST_VAR 
+{ 
+                        if (doubleDeclaration($2)==0){ modifier_type($2,sauvidf); }
+                        else{{printf("\n=======> Errreur symantique a la ligne %d , DOUBLE DECLARATION  de idf %s\n",nb_ligne,Col,$2);}}}
         | 
 ;
 
@@ -175,19 +178,15 @@ AFFECT :AFFECT_ARITHM
         |AFF_SPECIAL 
 ;
 
-/*a revoir pour les idf */
+PATH: par_O guillemets idf guillemets par_F
+        | idf
+     ;
+
 AFF_SPECIAL: idf mc_aff mc_Img'.'mc_pilf1 PATH SAUT
-           | idf mc_aff idf'.'mc_npf1 par_O idf par_F PATH par_O SAUT
-           |idf mc_aff mc_pilf1'.'mc_pilf1 par_O idf par_F'.'mc_pilf3 par_O PATH par_F SAUT
-           |idf mc_aff mc_pilf1'.'mc_pilf2 par_O idf par_F'.'mc_pilf3 par_O PATH par_F SAUT
+           | idf mc_aff idf'.'mc_npf1 PATH SAUT
+           |mc_Img'.'mc_pilf2 PATH'.'mc_pilf3 PATH SAUT
 ;
 
-PATH: idf 
-     {if (doubleDeclaration($1)!=0) {
-        printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s non declarer", nb_ligne, Col,$1);
-     }}
-     |guillemets idf guillemets
-     ;
 AFFECT_ARITHM : idf mc_aff EXP_ARRITH  SAUT 
 {        tmp=Depiler();
          chartype=get_type($1);
@@ -221,7 +220,7 @@ EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH
             ajout_quad_opbinaire('+',&op1,&op2);
             
          }
-	 |EXP_ARRITH minus EXP_ARRITH   
+	      |EXP_ARRITH minus EXP_ARRITH   
           {
             op2=Depiler();op1=Depiler(); tmp = op1-op2; Empiler(tmp);
             ajout_quad_opbinaire('-',&op1,&op2);
@@ -259,7 +258,7 @@ EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH
             get_val_float($1,&tmp);
             Empiler(tmp);}} 
            |cst_int {Empiler($1);}
-     	   |cst_reel { Empiler($1);}
+     	     |cst_reel { Empiler($1);}
 ;
 
 BLOC_INST : tabulation INST BLOC_INST 
@@ -327,7 +326,7 @@ EXP_LOGIQUE: par_O EXP_COMPAR par_F OP_LOG par_O EXP_COMPAR par_F
 ;
 
 OP_LOG : mc_and
-	| mc_not
+	     | mc_not
         | mc_OR
 ;
 WHILE : BB BLOC_INST{
@@ -357,14 +356,13 @@ AA : mc_while par_O
 FOR_RANGE :CCC par_F mc_2p SAUT BLOC_INST
 {
 	inc_val_idf(sauvidf);
-        quadruplet("+",sauvidf,"1",sauvidf);
+   quadruplet("+",sauvidf,"1",sauvidf);
 	sprintf(quad2,"%d",quadindex1);
 	quadruplet("BR",quad2,"","");
 	sprintf(quad2,"%d",qc);
 	maj_quad(quadindex1,1,quad2);
 };
 CCC: BBB vrg EXP_ARRITH  {
-
 	op2=Depiler();
 	if(Is_int(&op2)==0){
 		printf("\n=======> Errreur symantique a la ligne %d colonne %d ,  %f n'est pas INT \n",nb_ligne,Col,tmp); return 1;
@@ -390,11 +388,11 @@ BBB : AAA mc_in mc_range par_O EXP_ARRITH
 ;
 AAA : mc_for idf
 {
-	if(doubleDeclaration($2)==0){
-		modifier_type($2,"INTEGER");
-		strcpy(sauvidf,$2);
+	if(doubleDeclaration($2)!=0){
+		inserer($2,"IDF","INTEGER", 0, "", 0);
 
-		}else{
+		}
+      else{
 		chartype=get_type($2);
 		if(strcmp(chartype,"INTEGER")==0){
 			strcpy(sauvidf,$2);
@@ -414,10 +412,9 @@ int main()
    initialisation();
    yyparse(); 
    afficher_qdr();
+   //optimisation();
    afficher();  
   
-  
-   
    
 }
 int yywrap()

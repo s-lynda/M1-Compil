@@ -367,16 +367,16 @@ static const flex_int16_t yy_accept[139] =
        37,   31,   36,   24,   24,   24,   46,   47,   52,   52,
        52,   52,   52,   52,   52,   52,   52,   52,   52,   52,
         0,   40,    0,   48,    0,    0,    0,   25,   38,   41,
-       39,   24,   24,   24,   24,    0,    2,    0,    0,    0,
-        0,    0,    0,    0,   20,    0,   12,    0,    0,    0,
+       39,   24,   24,   24,   24,    0,    3,    0,    0,    0,
+        0,    0,    0,    0,   20,    0,    1,    0,    0,    0,
        18,    0,    0,    0,    0,    0,   29,    0,    0,   27,
-       24,   13,    4,   17,    0,    0,    0,    0,    0,    0,
+       24,   13,    5,   17,    0,    0,    0,    0,    0,    0,
        22,    0,    0,   19,    0,    0,    0,    0,    0,    0,
 
        50,    0,   26,    0,    0,   24,    0,   15,   16,   21,
-        0,    0,   10,    0,    0,    6,    0,    8,   30,    0,
-        0,    5,    0,   14,    0,    0,    3,   11,   23,   28,
-        0,    0,    1,    7,    0,    0,    9,    0
+        0,    0,   11,    0,    0,    7,    0,    9,   30,    0,
+        0,    6,    0,   14,    0,    0,    4,   12,   23,   28,
+        0,    0,    2,    8,    0,    0,   10,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -831,62 +831,62 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 33 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_import;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_in;}     
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 34 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_as;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_import;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 35 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_numpy;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_as;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 36 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pil;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_numpy;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 37 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_Img;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pil;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 38 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf1;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_Img;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 39 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_npf1;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf1;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 40 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf3;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_npf1;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 41 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_pilf2;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_pilf3;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 42 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_from;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_pilf2;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 43 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_range;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_from;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 44 "lexical.l"
-{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext);return mc_in;}
+{inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", nb_ligne,yytext);Col=Col+strlen(yytext); return mc_range;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
