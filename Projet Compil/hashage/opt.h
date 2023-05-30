@@ -43,6 +43,45 @@ void removeUnusedQuads()
     }
 }
 
+void chekPropCopie(quad* q)
+{
+    quad* current = q;
+    while (current != NULL)
+    {
+        if (current->opr[0] == '=')
+        {
+            quad* innerCurrent = current->next;
+            while (innerCurrent != NULL)
+            {
+                if (strcmp(current->op1, innerCurrent->res) == 0 || strcmp(current->res, innerCurrent->res) == 0)
+                    break;
+                if (innerCurrent->opr[0] == '+' || innerCurrent->opr[0] == '*' || innerCurrent->opr[0] == '-' || innerCurrent->opr[0] == '/' || innerCurrent->opr[0] == '^')
+                {
+                    if (strcmp(current->res, innerCurrent->op1) == 0)
+                    {
+                        innerCurrent->op1 = strdup(current->op1);
+                        freeQuad(current);
+                        current->opr = strdup("");
+                        current->op1 = strdup("");
+                        current->op2 = strdup("");
+                        current->res = strdup("");
+                    }
+                    else if (strcmp(current->res, innerCurrent->op2) == 0)
+                    {
+                        innerCurrent->op2 = strdup(current->op1);
+                        freeQuad(current);
+                        current->opr = strdup("");
+                        current->op1 = strdup("");
+                        current->op2 = strdup("");
+                        current->res = strdup("");
+                    }
+                }
+                innerCurrent = innerCurrent->next;
+            }
+        }
+        current = current->next;
+    }
+}
 
 /*
 void checkX2(quad* q)

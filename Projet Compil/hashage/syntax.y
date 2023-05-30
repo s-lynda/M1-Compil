@@ -3,23 +3,23 @@
 #include<stdlib.h>
 #include<string.h>
 #include"pile.h"
-//#include "opt.h"
+#include "opt.h"
 #include "quadruplets.h"
 #define MAX 1000
 #define MAX_SIZE 1000
 #define HASH_SIZE 40
 
-// #ifndef SYMBOL_TABLE_H
-// #define SYMBOL_TABLE_H
-// int doubleDeclaration(char idf[]);
-// void modifier_type(char idf[], char type[]);
-// void set_val_string(char idf[], char type[]);
-// void inserer(char entite[], char code[], char type[], float val, char val_string[], int y) ;
-// void initialisation();
-// void afficher();
-// void SetVal(char entite[], float z);
-// char* get_type(char idf[]);
-// #endif
+#ifndef SYMBOL_TABLE_H
+#define SYMBOL_TABLE_H
+int doubleDeclaration(char idf[]);
+void modifier_type(char idf[], char type[]);
+void set_val_string(char idf[], char type[]);
+void inserer(char entite[], char code[], char type[], float val, char val_string[], int y) ;
+void initialisation();
+void afficher();
+void SetVal(char entite[], float z);
+char* get_type(char idf[]);
+#endif
 
 #define MAX_SIZE 1000
 extern int nb_ligne;
@@ -415,7 +415,7 @@ int main()
    initialisation();
    yyparse(); 
    afficher_qdr();
-   //optimisation();
+   optimisation();
    afficher();  
   
    
