@@ -3,11 +3,12 @@ import numpy as Np
 
 # On charge l'image et on la transforme en tableau contenant les couleurs
 Imageen = Image.open("Img1")
-Image = Np.asarray(Imageen)
+Imagen = Np.asarray(Imageen)
 
 # Partie à compléter
-ImageSortie = 255 - Image
+ImageSo = 255 - Imageen
 
 # On sauvegarde les images pour pouvoir les afficher
-Image.fromarray(Image).save("Imageentree.png")
-Image.fromarray(Image_sortie).save("Imagesortie")
+Image.fromarray(Imagen).save("Imageen")
+Image.fromarray(ImageSo).save("ImageSo")
+Image = Np.asarray(Imageen)

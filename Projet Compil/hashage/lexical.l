@@ -107,6 +107,8 @@ Int {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", 
 ":" {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return mc_2p;  }
 "[" {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); return croch_O;}
 "]" {inserer_separators(yytext);Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return croch_F;}
+"\"" {inserer_separators(yytext);Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return guillemets;}
+"." {inserer_separators(yytext);Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext );return point;}
 {comment} {nb_ligne++;}
 [ \t ] { Col = Col + strlen(yytext);}
 "    " {Col = Col + 4; return tabulation;}

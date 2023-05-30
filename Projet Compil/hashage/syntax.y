@@ -58,7 +58,7 @@ int quadindex1 ,quadindex2;
         mc_aff plus minus mul division
         mc_and  mc_OR mc_not sup inf infOuEg SupOuEg  diff egale 
         par_O  par_F mc_if mc_else mc_for vrg  mc_2p  mc_while
-        croch_O  croch_F tabulation guillemets sautdligne
+        croch_O  croch_F tabulation guillemets sautdligne point
 
 /* Associativité et priorités des opérateurs */
 %left sup SupOuEg egale diff infOuEg inf  /*associé de gauche */
@@ -133,7 +133,7 @@ INST : AFFECT
       | IF_ELSE
       | WHILE 
       |FOR_RANGE
-      
+      |FOR_IN
 ;
 
 AFFECT :AFFECT_ARITHM 
@@ -178,14 +178,13 @@ AFFECT :AFFECT_ARITHM
         |AFF_SPECIAL 
 ;
 
-PATH: par_O guillemets idf guillemets par_F
-        | idf
-     ;
-
-AFF_SPECIAL: idf mc_aff mc_Img'.'mc_pilf1 PATH SAUT
-           | idf mc_aff idf'.'mc_npf1 PATH SAUT
-           |mc_Img'.'mc_pilf2 PATH'.'mc_pilf3 PATH SAUT
+AFF_SPECIAL: idf mc_aff mc_Img point mc_pilf1 PATH SAUT
+           | idf mc_aff idf point mc_npf1 PATH SAUT
+           |mc_Img point mc_pilf2 PATH point mc_pilf3 PATH SAUT
 ;
+PATH: par_O guillemets idf guillemets par_F
+        | par_O idf par_F
+     ;
 
 AFFECT_ARITHM : idf mc_aff EXP_ARRITH  SAUT 
 {        tmp=Depiler();
@@ -226,7 +225,7 @@ EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH
             ajout_quad_opbinaire('-',&op1,&op2);
 
           }
-	  |EXP_ARRITH mul EXP_ARRITH 
+	      |EXP_ARRITH mul EXP_ARRITH 
           {
             op2=Depiler();op1=Depiler(); tmp = op1*op2; Empiler(tmp);
             ajout_quad_opbinaire('*',&op1,&op2);
@@ -235,7 +234,7 @@ EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH
             {        
              op2=Depiler();op1=Depiler();
              if(op2==0){
-		printf ("    >>>>>>> Erreur semantique ligne %d colonne %d DIVISION PAR 0 \n",nb_ligne,Col);
+		printf ("> Erreur semantique ligne %d colonne %d DIVISION PAR 0 \n",nb_ligne,Col);
 			     }else{
 
                 tmp = op1/op2; Empiler(tmp);
@@ -261,32 +260,7 @@ EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH
      	     |cst_reel { Empiler($1);}
 ;
 
-BLOC_INST : tabulation INST BLOC_INST 
-          | tabulation INST 
-;
-
-// Instruction IF ELSE
-IF_ELSE :  B BLOC_INST {
-		sprintf(sauvindex,"%d",qc);
-		maj_quad(quadindex2,1,sauvindex);
-
-}
-; 
-
-B : A BLOC_INST mc_else mc_2p SAUT
-{       quadindex2=qc;
-	quadruplet("BR","","","");
-	sprintf(sauvindex,"%d",qc);
-	maj_quad(quadindex1,1,sauvindex);}
-; 
-A : mc_if par_O COND par_F mc_2p SAUT
- {
-        tmp=Depiler();
-	ajout_quad_affect_val("tmp_cond",&tmp);
-	quadindex1=qc;
-	quadruplet(quad1 ,"","","tmp_cond");
-}
-;
+/* ---Condition---*/
 COND : EXP_LOGIQUE
       |EXP_COMPAR
 ;
@@ -320,8 +294,9 @@ EXP_COMPAR: EXP_ARRITH egale EXP_ARRITH
 		strcpy(quad1,"BL");
 		op2=Depiler();op1=Depiler(); tmp=(op1 >= op2); Empiler(tmp);
 		
-	   };
+	   }
 ;
+
 EXP_LOGIQUE: par_O EXP_COMPAR par_F OP_LOG par_O EXP_COMPAR par_F
 ;
 
@@ -329,13 +304,42 @@ OP_LOG : mc_and
 	     | mc_not
         | mc_OR
 ;
-WHILE : BB BLOC_INST{
+
+/*------ Instruction -------*/
+BLOC_INST : tabulation INST BLOC_INST 
+          | tabulation INST 
+;
+
+// Instruction IF ELSE
+IF_ELSE :  B BLOC_INST 
+{
+		sprintf(sauvindex,"%d",qc);
+		maj_quad(quadindex2,1,sauvindex);
+
+}
+; 
+
+B : A BLOC_INST mc_else mc_2p SAUT
+{       quadindex2=qc;
+	quadruplet("BR","","","");
+	sprintf(sauvindex,"%d",qc);
+	maj_quad(quadindex1,1,sauvindex);}
+; 
+A : mc_if par_O COND par_F mc_2p SAUT
+ {
+   tmp=Depiler();
+	ajout_quad_affect_val("tmp_cond",&tmp);
+	quadindex1=qc;
+	quadruplet(quad1 ,"","","tmp_cond");
+}
+;
+/* ---While Instruction ---*/
+WHILE : BB BLOC_INST
+{
 	sprintf(sauvindex,"%d",quadindex1);
 	quadruplet("BR",sauvindex,"","");
 	sprintf(sauvindex,"%d",qc);
 	maj_quad(quadindex2,1,sauvindex);
-   
-
 };
  
 BB: AA COND par_F mc_2p SAUT
@@ -350,8 +354,9 @@ AA : mc_while par_O
 {
 	quadindex1 = qc;
 	
- }
+}
 ;
+/* ---FOR_V1---*/
 
 FOR_RANGE :CCC par_F mc_2p SAUT BLOC_INST
 {
@@ -375,17 +380,16 @@ CCC: BBB vrg EXP_ARRITH  {
 };
 
 BBB : AAA mc_in mc_range par_O EXP_ARRITH 
- {
-	op1=Depiler();
-	if(Is_int(&op1)==0){
-		printf("\n=======> Errreur symantique a la ligne %d colonne %d ,  %f n'est pas INT \n",nb_ligne,Col,tmp);return 1;
+   {
+	    op1=Depiler();
+	    if(Is_int(&op1)==0)
+       {
+		    printf("\n=======> Errreur symantique a la ligne %d colonne %d ,  %f n'est pas INT \n",nb_ligne,Col,tmp);return 1;
 
 	}else{
 		SetVal(sauvidf,tmp);
 	}
 };
-     |AAA mc_in  par_O EXP_ARRITH
-;
 AAA : mc_for idf
 {
 	if(doubleDeclaration($2)!=0){
@@ -398,17 +402,16 @@ AAA : mc_for idf
 			strcpy(sauvidf,$2);
 
 		}else{
-			printf("\n=======> Errreur symantique a la ligne %d colonne %d , idf %s n'est pas INT \n",nb_ligne,Col,$2);return 1;
-
-		
-	}}
+			printf("\n > Errreur symantique a la ligne %d colonne %d , idf %s n'est pas INT \n",nb_ligne,Col,$2);return 1;
+	   }
+      }
 };
-
+/*--For version 2*/
+FOR_IN: AAA mc_2p SAUT BLOC_INST
+;
 %%        
 int main()
 { 
-   
- 
    initialisation();
    yyparse(); 
    afficher_qdr();
@@ -422,7 +425,7 @@ int yywrap()
 {}
 int yyerror(char *msg)
 {
-  printf("\n   =====> Erreur Syntaxique  \n au niveau la ligne %d et a la colonne %d \n", nb_ligne,Col);
+  printf("\n > Erreur Syntaxique  \n au niveau la ligne %d et a la colonne %d \n", nb_ligne,Col);
    return 1;
 
 }

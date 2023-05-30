@@ -1,6 +1,7 @@
 import numpy as np 
 x=2
 
+type test.txt | mycompiler.exe
 
 bison -v  syntax.y -o  pp -> pour les conflicts
 

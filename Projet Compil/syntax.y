@@ -125,7 +125,7 @@ AFFECT_ARITHM : idf mc_aff EXP_ARRITH  SAUT
 
 EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH     
            |EXP_ARRITH division EXP_ARRITH 
-           |minus EXP_ARRITH
+           |EXP_ARRITH minus EXP_ARRITH
            |par_O EXP_ARRITH par_O
            |idf    { if (doubleDeclaration($1)==0){ 
             {printf("\n=======> Errreur symantique a la ligne %d colonne %d , operand %s non declare\n",nb_ligne,Col,$1);}}  }   
