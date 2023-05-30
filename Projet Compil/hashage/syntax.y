@@ -4,7 +4,7 @@
 #include<string.h>
 #include"pile.h"
 #include "opt.h"
-#include "quadruplets.h"
+//#include "quadruplets.h"
 #define MAX 1000
 #define MAX_SIZE 1000
 #define HASH_SIZE 40

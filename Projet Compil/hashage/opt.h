@@ -2,17 +2,25 @@
 #include <string.h>
 #include <stdlib.h>
 //#include "TS_hash.h"
-//#include "quadruplets.h"
+#include "quadruplets.h"
 
 void oprimisation()
 {
-    //checkX2(head);
+    checkX2(head);
     //checkPow(head);
    // checkVarUse(listesymbol, head);
-   // chekPropCopie(head);
+    chekPropCopie(head);
     removeUnusedQuads();
 }
 
+void freeQuad(quad* q)
+{
+    free(q->op);
+    free(q->op1);
+    free(q->op2);
+    free(q->res);
+    free(q);
+}
 void removeUnusedQuads()
 {
     quad* current = head;
@@ -83,7 +91,6 @@ void chekPropCopie(quad* q)
     }
 }
 
-/*
 void checkX2(quad* q)
 {
     quad* current = q;
@@ -107,6 +114,8 @@ void checkX2(quad* q)
         current = current->next;
     }
 }
+/*
+
 
 void checkPow(quad* q)
 {
