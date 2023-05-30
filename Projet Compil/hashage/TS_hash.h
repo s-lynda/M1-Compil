@@ -14,6 +14,7 @@ typedef struct element {
    char name[20];
    char code[20];
    char type[20];
+   char nature[20];
    float val;
    struct element* next;
    char valstring[10]; // for storing CHAR and BOOL values
@@ -55,11 +56,12 @@ void initialisation() {
 /***Step 4: Insertion des entités lexicales dans les tables des symboles ***/
 
 // Insertion into the IDF and constant table
-void inserer(char entite[], char code[], char type[], float val, char val_string[], int y) {
+void inserer(char entite[], char code[], char type[], float val, char val_string[], int y,char nature[]) {
    element* new_entry = malloc(sizeof(element));
    strcpy(new_entry->name, entite);
    strcpy(new_entry->code, code);
    strcpy(new_entry->type, type);
+   strcpy(new_entry->nature, nature);
    new_entry->val = val;
    strcpy(new_entry->valstring, val_string);
    new_entry->state = 1;
@@ -73,6 +75,7 @@ void inserer(char entite[], char code[], char type[], float val, char val_string
          // Entry already exists, update the values
          strcpy(entry->code, code);
          strcpy(entry->type, type);
+         strcpy(entry->nature, nature);
          entry->val = val;
          strcpy(entry->valstring, val_string);
          free(new_entry);
@@ -87,89 +90,6 @@ void inserer(char entite[], char code[], char type[], float val, char val_string
 
    cpt++;
 }
-
-// Insertion into the IDF and constant table
-void inserer_sans_verify(char entite[], char code[], char type[], float val, char val_string[], int y) {
-   element* new_entry = malloc(sizeof(element));
-   strcpy(new_entry->name, entite);
-   strcpy(new_entry->code, code);
-   strcpy(new_entry->type, type);
-   new_entry->val = val;
-   strcpy(new_entry->valstring, val_string);
-   new_entry->state = 1;
-
-   int hash = hash_function(entite);
-   tab[hash] = new_entry;
-
-
-}
-void insererS(char entite[], char code[], char type[], float val, char val_string[], int y) {
-   int hash = hash_function(entite);
-
-   // Recherche de l'entrée dans la table des symboles
-   element* previous_entry = NULL;
-   element* current_entry = tab[hash];
-   while (current_entry != NULL) {
-      if (strcmp(current_entry->name, entite) == 0) {
-         // Entrée trouvée, suppression de l'ancienne valeur
-         if (previous_entry != NULL) {
-            previous_entry->next = current_entry->next;
-         } else {
-            tab[hash] = current_entry->next;
-         }
-         free(current_entry);
-         break;
-      }
-      previous_entry = current_entry;
-      current_entry = current_entry->next;
-   }
-
-   // Insertion de la nouvelle entrée
-   element* new_entry = malloc(sizeof(element));
-   strcpy(new_entry->name, entite);
-   strcpy(new_entry->code, code);
-   strcpy(new_entry->type, type);
-   new_entry->val = val;
-   strcpy(new_entry->valstring, val_string);
-   new_entry->state = 1;
-
-   // Insérer la nouvelle entrée au début de la liste chaînée
-   new_entry->next = tab[hash];
-   tab[hash] = new_entry;
-
-   cpt++;
-}
-
-void insererM(char entite[], char code[], char type[], float val, char val_string[], int y) {
-   int hash = hash_function(entite);
-
-   // Recherche de l'entrée dans la table des symboles
-   element* entry = tab[hash];
-   while (entry != NULL) {
-      if (strcmp(entry->name, entite) == 0) {
-         // Entrée trouvée, mise à jour du type
-         strcpy(entry->type, type);
-         return;
-      }
-      entry = entry->next;
-   }
-
-   // Si l'entrée n'existe pas, elle est insérée dans la table des symboles
-   element* new_entry = malloc(sizeof(element));
-   strcpy(new_entry->name, entite);
-   strcpy(new_entry->code, code);
-   strcpy(new_entry->type, type);
-   new_entry->val = val;
-   strcpy(new_entry->valstring, val_string);
-   new_entry->state = 1;
-
-   // Insérer la nouvelle entrée au début de la liste chaînée
-   new_entry->next = tab[hash];
-   tab[hash] = new_entry;
-
-   cpt++;
-}
-
 void free_hash_table() {
    // Free the IDF and constant table
    for (int i = 0; i < MAX_SIZE; i++) {
@@ -259,13 +179,13 @@ void afficher_table_idf1() {
 void afficher_table_idf() {
    printf("Table des IDF et des constantes :\n");
    printf("-------------------------------------------------------------\n");
-   printf("|    Nom    |   Code      |  Type    |  Val  |  Val_String  |\n");
+   printf("|    Nom    |   Code      |  Type    |  Val  |  Val_String  |  Nature  |\n");
    printf("-------------------------------------------------------------\n");
 
    for (int i = 0; i < MAX_SIZE; i++) {
       element* entry = tab[i];
       while (entry != NULL) {
-         printf("| %-10s | %-11s | %-8s | %-5.2f | %-12s |\n", entry->name, entry->code, entry->type, entry->val, entry->valstring);
+         printf("| %-10s | %-11s | %-8s | %-5.2f | %-12s | %-12s |\n", entry->name, entry->code, entry->type, entry->val, entry->valstring,entry->nature);
          entry = entry->next;
       }
    }

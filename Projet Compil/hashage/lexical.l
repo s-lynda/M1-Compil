@@ -68,7 +68,7 @@ Int {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", 
 						     printf ("Erreur lexicale: depassement de la taille des entiers  a la Ligne %d et a la colonne %d \n", nb_ligne, Col);
 					   }
 					   else {
-						     inserer (yytext,"Cst_entier","INTEGER",atoi(yytext),"", 0);
+						     inserer (yytext,"Cst_entier","INTEGER",atoi(yytext),"", 0,"");
 						     printf("Ligne %d integer reconnu %s \n" ,nb_ligne, yytext );   return cst_int; 
 					   }
 	}
@@ -83,13 +83,13 @@ Int {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", 
 						     printf("Ligne %d  signed integer reconnu %s \n" ,nb_ligne, yytext );   return cst_int; 
 					   }
 	}	
-{UnsignedFloat} { inserer(yytext,"cst_reel","FLOAT",atof(yytext),"",0); yylval.reel=atof(yytext);printf("Ligne %d  float reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_reel;}
+{UnsignedFloat} { inserer(yytext,"cst_reel","FLOAT",atof(yytext),"",0,""); yylval.reel=atof(yytext);printf("Ligne %d  float reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_reel;}
 {SignedFloat}  { 
 				yylval.entier=atoi(tmps_signed_numbers); 				
 				yylval.reel=atof(tmps_signed_numbers); printf("Ligne %d  signed float reconnu %s \n" ,nb_ligne, yytext ); 
 				Col = Col + strlen(yytext); return cst_reel;}
-{char}  { inserer (yytext,"cst_char","CHAR",0,yytext, 0); yylval.str=strdup(yytext); printf("Ligne %d char reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_char;}
-{bool} {inserer(yytext,"cst_bool","BOOLEAN",0,yytext, 0);yylval.str=strdup(yytext); printf("ligne %d : boolean reconnu %s \n",nb_ligne,yytext);Col=Col+strlen(yytext); return cst_bool; }
+{char}  { inserer (yytext,"cst_char","CHAR",0,yytext, 0,""); yylval.str=strdup(yytext); printf("Ligne %d char reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_char;}
+{bool} {inserer(yytext,"cst_bool","BOOLEAN",0,yytext, 0,"");yylval.str=strdup(yytext); printf("ligne %d : boolean reconnu %s \n",nb_ligne,yytext);Col=Col+strlen(yytext); return cst_bool; }
 "=" {inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); yylval.str=strdup(yytext);return mc_aff;}
 "+" {inserer_separators(yytext);Col=Col+strlen(yytext); printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); yylval.str=strdup(yytext);return plus; }
 "-" { inserer_separators(yytext);Col=Col+strlen(yytext);printf("ligne %d : separateur reconnu   %s \n" , nb_ligne,yytext ); yylval.str=strdup(yytext); return minus; }

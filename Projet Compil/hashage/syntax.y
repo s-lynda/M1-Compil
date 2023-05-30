@@ -14,7 +14,7 @@
 int doubleDeclaration(char idf[]);
 void modifier_type(char idf[], char type[]);
 void set_val_string(char idf[], char type[]);
-void inserer(char entite[], char code[], char type[], float val, char val_string[], int y) ;
+void inserer(char entite[], char code[], char type[], float val, char val_string[], int y,char nature[]) ;
 void initialisation();
 void afficher();
 void SetVal(char entite[], float z);
@@ -30,10 +30,12 @@ int yyerror(char *s);
 int Col=1;
 char sauvidf[10];  // save type  ( BOOLEAN , CHAR FLOAT INTEGER ) , pour màj de type idf 
 char sauvval[10];
+char sauvidfqud[10];
 char sauvindex[4];
 char quad1[10]; 
 char quad2[10];
 int qc = 0;
+int its_idf=0;
 float op1,op2; // gerer les exp_arthimetique pour maj de idf et test conditions 
 char* chartype;
 int quadindex1 ,quadindex2;
@@ -95,7 +97,7 @@ List_Dec : DEC SAUT
 DEC: TYPE idf LIST_VAR {                      
                         // Mettre à jour le type dans la structure element
                         if (doubleDeclaration($2)!=0)
-                        {inserer($2,"IDF",sauvidf, 0, "", 0);}
+                        {inserer($2,"IDF",sauvidf, 0, "", 0,"VARIABLE");}
                         else {
                                 printf("\n =====> Erreur a la ligne %d et colonne %d : idf deja declarer", nb_ligne, Col);
                         }
@@ -109,7 +111,7 @@ DEC: TYPE idf LIST_VAR {
 // un tableau est reconnue comme type table , pas d'allocation d'espace 
 TAB_DEC: TYPE idf croch_O cst_int croch_F 
                     {   if (doubleDeclaration($2)!=0)
-                        {inserer($2,"IDF",sauvidf, 0, "", 0);}
+                        {inserer($2,"IDF",sauvidf, 0, "", 0,"VARIABLE");}
                         else {
                                 printf("\n =====> Erreur a la ligne %d et colonne %d : idf deja declarer", nb_ligne, Col);
                         }}
@@ -152,7 +154,7 @@ AFFECT :AFFECT_ARITHM
         }
         else{
             // pas declarer je l'insere
-            inserer($1,"IDF","CHAR", 0, $3, 0);
+            inserer($1,"IDF","CHAR", 0, $3, 0,"VARIABLE");
             quadruplet("=",$3,"",$1);
 
         }} 
@@ -172,7 +174,7 @@ AFFECT :AFFECT_ARITHM
         }
         else{
             // pas declarer je l'insere
-            inserer($1,"IDF","BOOL", 0, $3, 0);
+            inserer($1,"IDF","BOOL", 0, $3, 0,"VARIABLE");
 
         }}   
         |AFF_SPECIAL 
@@ -195,6 +197,13 @@ AFFECT_ARITHM : idf mc_aff EXP_ARRITH  SAUT
                if(strcmp(chartype,"BOOLEAN")==0){
                printf("    >>>>>>> Erreur semantique ligne %d colonne %d INCOMPATIBILITE DE TYPE , idf %s est un BOOLEAN , ne peut pas recevoir une valeure numerique \n",nb_ligne,Col,$1);}
                else {
+                if(its_idf==1) 
+                {
+                  ajout_quad_affect_idf($1,sauvidfqud);
+                  SetVal($1,tmp);
+                  its_idf=0;
+                } 
+                else {
                 SetVal($1,tmp);
                 ajout_quad_affect_val($1,&tmp);
                 if(Is_int(&tmp)==1)
@@ -205,13 +214,13 @@ AFFECT_ARITHM : idf mc_aff EXP_ARRITH  SAUT
                }else{
                   printf("its a float");
                   modifier_type($1,"FLOAT");
-                  }
+                  }}
              }
 }}
 
 
 
-// donc ici je peux ajouter deux deux seulement ?
+
 EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH     
          {
             op2=Depiler();op1=Depiler(); tmp = op1+op2; Empiler(tmp);
@@ -226,7 +235,10 @@ EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH
 
           }
 	      |EXP_ARRITH mul EXP_ARRITH 
-          {
+          { /*if (its_idf==1){
+            op2=Depiler();get_val_float(sauvidfqud,op1); tmp = op1*op2; Empiler(tmp);
+            ajout_quad_('*',&op1,sauvidfqud); 
+          }*/
             op2=Depiler();op1=Depiler(); tmp = op1*op2; Empiler(tmp);
             ajout_quad_opbinaire('*',&op1,&op2);
           } 
@@ -255,6 +267,8 @@ EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH
             {printf("\n=======> Errreur symantique a la ligne %d colonne %d , operand %s non declare\n",nb_ligne,Col,$1);}}
             else{
             get_val_float($1,&tmp);
+            its_idf=1;
+            strcpy(sauvidfqud,$1);
             Empiler(tmp);}} 
            |cst_int {Empiler($1);}
      	     |cst_reel { Empiler($1);}
@@ -393,7 +407,7 @@ BBB : AAA mc_in mc_range par_O EXP_ARRITH
 AAA : mc_for idf
 {
 	if(doubleDeclaration($2)!=0){
-		inserer($2,"IDF","INTEGER", 0, "", 0);
+		inserer($2,"IDF","INTEGER", 0, "", 0,"VARIABLE");
 
 		}
       else{
@@ -416,6 +430,7 @@ int main()
    yyparse(); 
    afficher_qdr();
    optimisation();
+   afficher_qdr();
    afficher();  
   
    

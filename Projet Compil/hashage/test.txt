@@ -1,5 +1,7 @@
-Int Bn 
-Int CM 
-Int Vm 
+Int T1
+Int T2
+Int T3
 
-Vm=2*5
+T1=T2
+T3=4*T1
+

@@ -4,18 +4,9 @@
 //#include "TS_hash.h"
 #include "quadruplets.h"
 
-void oprimisation()
-{
-    checkX2(head);
-    //checkPow(head);
-   // checkVarUse(listesymbol, head);
-    chekPropCopie(head);
-    removeUnusedQuads();
-}
-
 void freeQuad(quad* q)
 {
-    free(q->op);
+    free(q->opr);
     free(q->op1);
     free(q->op2);
     free(q->res);
@@ -114,6 +105,18 @@ void checkX2(quad* q)
         current = current->next;
     }
 }
+
+
+
+void optimisation()
+{
+    checkX2(head);
+    //checkPow(head);
+   // checkVarUse(listesymbol, head);
+    chekPropCopie(head);
+    removeUnusedQuads();
+}
+
 /*
 
 

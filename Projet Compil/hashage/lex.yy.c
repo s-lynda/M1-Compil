@@ -965,7 +965,7 @@ YY_RULE_SETUP
 						     printf ("Erreur lexicale: depassement de la taille des entiers  a la Ligne %d et a la colonne %d \n", nb_ligne, Col);
 					   }
 					   else {
-						     inserer (yytext,"Cst_entier","INTEGER",atoi(yytext),"", 0);
+						     inserer (yytext,"Cst_entier","INTEGER",atoi(yytext),"", 0,"");
 						     printf("Ligne %d integer reconnu %s \n" ,nb_ligne, yytext );   return cst_int; 
 					   }
 	}
@@ -988,7 +988,7 @@ YY_RULE_SETUP
 case 27:
 YY_RULE_SETUP
 #line 86 "lexical.l"
-{ inserer(yytext,"cst_reel","FLOAT",atof(yytext),"",0); yylval.reel=atof(yytext);printf("Ligne %d  float reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_reel;}
+{ inserer(yytext,"cst_reel","FLOAT",atof(yytext),"",0,""); yylval.reel=atof(yytext);printf("Ligne %d  float reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_reel;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
@@ -1002,12 +1002,12 @@ case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
 #line 91 "lexical.l"
-{ inserer (yytext,"cst_char","CHAR",0,yytext, 0); yylval.str=strdup(yytext); printf("Ligne %d char reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_char;}
+{ inserer (yytext,"cst_char","CHAR",0,yytext, 0,""); yylval.str=strdup(yytext); printf("Ligne %d char reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_char;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 92 "lexical.l"
-{inserer(yytext,"cst_bool","BOOLEAN",0,yytext, 0);yylval.str=strdup(yytext); printf("ligne %d : boolean reconnu %s \n",nb_ligne,yytext);Col=Col+strlen(yytext); return cst_bool; }
+{inserer(yytext,"cst_bool","BOOLEAN",0,yytext, 0,"");yylval.str=strdup(yytext); printf("ligne %d : boolean reconnu %s \n",nb_ligne,yytext);Col=Col+strlen(yytext); return cst_bool; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP

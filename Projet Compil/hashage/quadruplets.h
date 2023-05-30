@@ -105,6 +105,11 @@ void ajout_quad_affect_val(char entite[], float* val) {
     quadruplet("=", ope1, "", entite);
 }
 
+void ajout_quad_affect_idf(char entite[], char val[]) {
+   
+    quadruplet("=", val, "", entite);
+}
+
 void free_quad_list() {
     quad* current = head;
     while (current != NULL) {
