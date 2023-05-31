@@ -563,13 +563,13 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint16 yyrline[] =
 {
        0,    73,    73,    74,    75,    76,    78,    82,    83,    85,
-      86,    87,    90,    91,    94,    97,   108,   112,   119,   128,
-     131,   132,   133,   134,   138,   139,   140,   141,   142,   145,
-     146,   167,   184,   187,   188,   189,   191,   192,   195,   228,
-     247,   266,   285,   313,   318,   320,   330,   331,   335,   336,
-     338,   343,   348,   355,   359,   364,   371,   374,   375,   376,
-     380,   381,   385,   393,   399,   408,   416,   424,   432,   441,
-     453,   464,   481
+      86,    87,    90,    91,    94,    97,   108,   112,   122,   131,
+     134,   135,   136,   137,   141,   142,   143,   144,   145,   148,
+     149,   170,   187,   190,   191,   192,   194,   195,   198,   231,
+     250,   269,   288,   316,   321,   323,   333,   334,   338,   339,
+     341,   346,   351,   358,   362,   367,   374,   377,   378,   379,
+     383,   384,   388,   396,   402,   411,   419,   427,   435,   444,
+     456,   467,   484
 };
 #endif
 
@@ -1597,17 +1597,21 @@ yyreduce:
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 113 "syntax.y"
-    {   if (doubleDeclaration((yyvsp[(2) - (5)].str))!=0)
-                        {inserer((yyvsp[(2) - (5)].str),"IDF",sauvidf, 0, "", 0,"VARIABLE");}
-                        else {
-                                printf("\n =====> Erreur a la ligne %d et colonne %d : idf deja declarer", nb_ligne, Col);
-                        }}
+#line 112 "syntax.y"
+    {
+                  if((yyvsp[(4) - (5)].entier)<=0){
+                  printf("    >>>>>>> Erreur semantique ligne %d colonne %d La taille du tableau doit etre superieure a 0  \n",nb_ligne,Col);}
+                  else{
+                  if(doubleDeclaration((yyvsp[(2) - (5)].str))!=0){
+                  inserer((yyvsp[(2) - (5)].str),"IDF",sauvidf, 0, "", 0,"TABLEAU");
+                  }else {printf("    >>>>>>> Erreur semantique ligne %d colonne %d ,DOUBLE DECLARATION de idf %s  \n",nb_ligne,Col,(yyvsp[(2) - (5)].str));}   
+                  
+                  }}
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 120 "syntax.y"
+#line 123 "syntax.y"
     { 
     if (doubleDeclaration((yyvsp[(2) - (3)].str)) != 0) {
       inserer((yyvsp[(2) - (3)].str),"IDF",sauvidf, 0, "", 0,"VARIABLE");
@@ -1620,31 +1624,31 @@ yyreduce:
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 131 "syntax.y"
+#line 134 "syntax.y"
     {strcpy(sauvidf,"INTEGER");}
     break;
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 132 "syntax.y"
+#line 135 "syntax.y"
     {strcpy(sauvidf,"FLOAT");}
     break;
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 133 "syntax.y"
+#line 136 "syntax.y"
     {strcpy(sauvidf,"BOOLEAN");}
     break;
 
   case 23:
 /* Line 1792 of yacc.c  */
-#line 134 "syntax.y"
+#line 137 "syntax.y"
     {strcpy(sauvidf,"CHAR");}
     break;
 
   case 30:
 /* Line 1792 of yacc.c  */
-#line 147 "syntax.y"
+#line 150 "syntax.y"
     {if (doubleDeclaration((yyvsp[(1) - (4)].str))==0) {
         // verifier compatibilite de type 
         chartype=get_type((yyvsp[(1) - (4)].str));
@@ -1667,7 +1671,7 @@ yyreduce:
 
   case 31:
 /* Line 1792 of yacc.c  */
-#line 168 "syntax.y"
+#line 171 "syntax.y"
     {if (doubleDeclaration((yyvsp[(1) - (4)].str))==0) {
         // verifier compatibilite de type 
         chartype=get_type((yyvsp[(1) - (4)].str));
@@ -1688,7 +1692,7 @@ yyreduce:
 
   case 38:
 /* Line 1792 of yacc.c  */
-#line 196 "syntax.y"
+#line 199 "syntax.y"
     {        tmp=Depiler();
          chartype=get_type((yyvsp[(1) - (4)].str));
          if(strcmp(chartype,"CHAR")==0){
@@ -1721,7 +1725,7 @@ yyreduce:
 
   case 39:
 /* Line 1792 of yacc.c  */
-#line 229 "syntax.y"
+#line 232 "syntax.y"
     { if (its_idf==1){
 
             op2=Depiler();op1=Depiler();
@@ -1744,7 +1748,7 @@ yyreduce:
 
   case 40:
 /* Line 1792 of yacc.c  */
-#line 248 "syntax.y"
+#line 251 "syntax.y"
     { if (its_idf==1){
 
             op2=Depiler();op1=Depiler();
@@ -1767,7 +1771,7 @@ yyreduce:
 
   case 41:
 /* Line 1792 of yacc.c  */
-#line 267 "syntax.y"
+#line 270 "syntax.y"
     { if (its_idf==1){
 
             op2=Depiler();op1=Depiler();
@@ -1790,7 +1794,7 @@ yyreduce:
 
   case 42:
 /* Line 1792 of yacc.c  */
-#line 286 "syntax.y"
+#line 289 "syntax.y"
     {        
              op2=Depiler();op1=Depiler();
              if(op2==0){
@@ -1822,7 +1826,7 @@ yyreduce:
 
   case 43:
 /* Line 1792 of yacc.c  */
-#line 314 "syntax.y"
+#line 317 "syntax.y"
     {
             op1=Depiler();tmp= -op1; Empiler(tmp);
             ajout_quad_opunaire(&op1);
@@ -1831,7 +1835,7 @@ yyreduce:
 
   case 45:
 /* Line 1792 of yacc.c  */
-#line 322 "syntax.y"
+#line 325 "syntax.y"
     { if (doubleDeclaration((yyvsp[(1) - (1)].str))!=0){ 
             {printf("\n=======> Errreur symantique a la ligne %d colonne %d , operand %s non declare\n",nb_ligne,Col,(yyvsp[(1) - (1)].str));}}
             else{
@@ -1844,19 +1848,19 @@ yyreduce:
 
   case 46:
 /* Line 1792 of yacc.c  */
-#line 330 "syntax.y"
+#line 333 "syntax.y"
     {Empiler((yyvsp[(1) - (1)].entier));}
     break;
 
   case 47:
 /* Line 1792 of yacc.c  */
-#line 331 "syntax.y"
+#line 334 "syntax.y"
     { Empiler((yyvsp[(1) - (1)].reel));}
     break;
 
   case 50:
 /* Line 1792 of yacc.c  */
-#line 339 "syntax.y"
+#line 342 "syntax.y"
     {
 		strcpy(quad1,"BNZ");
 		op2=Depiler();op1=Depiler(); tmp=(op1 == op2); Empiler(tmp);
@@ -1865,7 +1869,7 @@ yyreduce:
 
   case 51:
 /* Line 1792 of yacc.c  */
-#line 344 "syntax.y"
+#line 347 "syntax.y"
     {
 	   strcpy(quad1,"BZ");
 		op2=Depiler();op1=Depiler(); tmp=(op1 != op2); Empiler(tmp);
@@ -1874,7 +1878,7 @@ yyreduce:
 
   case 52:
 /* Line 1792 of yacc.c  */
-#line 349 "syntax.y"
+#line 352 "syntax.y"
     {
 		{
 		strcpy(quad1,"BGE");
@@ -1885,7 +1889,7 @@ yyreduce:
 
   case 53:
 /* Line 1792 of yacc.c  */
-#line 356 "syntax.y"
+#line 359 "syntax.y"
     {strcpy(quad1,"BG");
 		op2=Depiler();op1=Depiler(); tmp=(op1 <= op2); Empiler(tmp);
 		}
@@ -1893,7 +1897,7 @@ yyreduce:
 
   case 54:
 /* Line 1792 of yacc.c  */
-#line 360 "syntax.y"
+#line 363 "syntax.y"
     {
 		strcpy(quad1,"BLE");
 		op2=Depiler();op1=Depiler(); tmp=(op1 > op2); Empiler(tmp);
@@ -1902,7 +1906,7 @@ yyreduce:
 
   case 55:
 /* Line 1792 of yacc.c  */
-#line 364 "syntax.y"
+#line 367 "syntax.y"
     {
 		strcpy(quad1,"BL");
 		op2=Depiler();op1=Depiler(); tmp=(op1 >= op2); Empiler(tmp);
@@ -1912,7 +1916,7 @@ yyreduce:
 
   case 62:
 /* Line 1792 of yacc.c  */
-#line 386 "syntax.y"
+#line 389 "syntax.y"
     {
 		sprintf(sauvindex,"%d",qc);
 		maj_quad(quadindex2,1,sauvindex);
@@ -1922,7 +1926,7 @@ yyreduce:
 
   case 63:
 /* Line 1792 of yacc.c  */
-#line 394 "syntax.y"
+#line 397 "syntax.y"
     {       quadindex2=qc;
 	quadruplet("BR","","","");
 	sprintf(sauvindex,"%d",qc);
@@ -1931,7 +1935,7 @@ yyreduce:
 
   case 64:
 /* Line 1792 of yacc.c  */
-#line 400 "syntax.y"
+#line 403 "syntax.y"
     {
    tmp=Depiler();
 	ajout_quad_affect_val("tmp_cond",&tmp);
@@ -1942,7 +1946,7 @@ yyreduce:
 
   case 65:
 /* Line 1792 of yacc.c  */
-#line 409 "syntax.y"
+#line 412 "syntax.y"
     {
 	sprintf(sauvindex,"%d",quadindex1);
 	quadruplet("BR",sauvindex,"","");
@@ -1953,7 +1957,7 @@ yyreduce:
 
   case 66:
 /* Line 1792 of yacc.c  */
-#line 417 "syntax.y"
+#line 420 "syntax.y"
     {
 	tmp=Depiler();
 	ajout_quad_affect_val("tmp_cond",&tmp);
@@ -1964,7 +1968,7 @@ yyreduce:
 
   case 67:
 /* Line 1792 of yacc.c  */
-#line 425 "syntax.y"
+#line 428 "syntax.y"
     {
 	quadindex1 = qc;
 	
@@ -1973,7 +1977,7 @@ yyreduce:
 
   case 68:
 /* Line 1792 of yacc.c  */
-#line 433 "syntax.y"
+#line 436 "syntax.y"
     {
 	inc_val_idf(sauvidf);
    quadruplet("+",sauvidf,"1",sauvidf);
@@ -1986,7 +1990,7 @@ yyreduce:
 
   case 69:
 /* Line 1792 of yacc.c  */
-#line 441 "syntax.y"
+#line 444 "syntax.y"
     {
 	op2=Depiler();
 	if(Is_int(&op2)==0){
@@ -2002,7 +2006,7 @@ yyreduce:
 
   case 70:
 /* Line 1792 of yacc.c  */
-#line 454 "syntax.y"
+#line 457 "syntax.y"
     {
 	    op1=Depiler();
 	    if(Is_int(&op1)==0)
@@ -2017,7 +2021,7 @@ yyreduce:
 
   case 71:
 /* Line 1792 of yacc.c  */
-#line 465 "syntax.y"
+#line 468 "syntax.y"
     {
 	if(doubleDeclaration((yyvsp[(2) - (2)].str))!=0){
 		inserer((yyvsp[(2) - (2)].str),"IDF","INTEGER", 0, "", 0,"VARIABLE");
@@ -2037,7 +2041,7 @@ yyreduce:
 
 
 /* Line 1792 of yacc.c  */
-#line 2041 "syntax.tab.c"
+#line 2045 "syntax.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2269,16 +2273,17 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 483 "syntax.y"
+#line 486 "syntax.y"
         
 int main()
-{ 
+{  
    initialisation();
    yyparse(); 
    afficher_qdr();
    optimisation();
    afficher_qdr();
-   //createAssembler(qc,head);
+   struct quadTab* array = convertToArray(head);
+   createAssembler(qc,array);
    afficher();  
   
    

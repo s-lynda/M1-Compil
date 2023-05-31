@@ -10,6 +10,14 @@ typedef struct quad {
     struct quad* next;
 } quad;
 
+struct quadTab
+{
+	char* opr;
+	char* op1;
+	char* op2;
+	char* res;
+};
+
 quad* head = NULL; // Pointeur vers la tête de la liste chaînée
 extern int qc; // Compteur de quadruplets
 
@@ -136,3 +144,31 @@ void free_quad_list() {
 }
 
 
+struct quadTab* convertToArray(quad* quadList) {
+    // Determine the size of the linked list
+    int size = 0;
+    quad* currentQuad = quadList;
+    while (currentQuad != NULL) {
+        size++;
+        currentQuad = currentQuad->next;
+    }
+
+    // Allocate memory for the array
+    struct quadTab* array = malloc(size * sizeof(struct quadTab));
+    if (array == NULL) {
+        // Error handling for memory allocation failure
+        fprintf(stderr, "Memory allocation failed.\n");
+        return NULL;
+    }
+
+    // Traverse the linked list and copy the values to the array
+    currentQuad = quadList;
+    for (int i = 0; i < size; i++) {
+        array[i].opr = strdup(currentQuad->opr);
+        array[i].op1 = strdup(currentQuad->op1);
+        array[i].op2 = strdup(currentQuad->op2);
+        array[i].res = strdup(currentQuad->res);
+        currentQuad = currentQuad->next;
+    }
+     return array;
+    }

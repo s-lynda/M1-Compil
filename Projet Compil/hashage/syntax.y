@@ -109,12 +109,15 @@ DEC: TYPE idf LIST_VAR {
 ;
 
 // un tableau est reconnue comme type table , pas d'allocation d'espace 
-TAB_DEC: TYPE idf croch_O cst_int croch_F 
-                    {   if (doubleDeclaration($2)!=0)
-                        {inserer($2,"IDF",sauvidf, 0, "", 0,"TABLEAU");}
-                        else {
-                                printf("\n =====> Erreur a la ligne %d et colonne %d : idf deja declarer", nb_ligne, Col);
-                        }}
+TAB_DEC: TYPE idf croch_O cst_int croch_F {
+                  if($4<=0){
+                  printf("    >>>>>>> Erreur semantique ligne %d colonne %d La taille du tableau doit etre superieure a 0  \n",nb_ligne,Col);}
+                  else{
+                  if(doubleDeclaration($2)!=0){
+                  inserer($2,"IDF",sauvidf, 0, "", 0,"TABLEAU");
+                  }else {printf("    >>>>>>> Erreur semantique ligne %d colonne %d ,DOUBLE DECLARATION de idf %s  \n",nb_ligne,Col,$2);}   
+                  
+                  }};
 ;
 LIST_VAR: vrg idf LIST_VAR
 { 
@@ -482,13 +485,14 @@ FOR_IN: AAA mc_2p SAUT BLOC_INST
 ;
 %%        
 int main()
-{ 
+{  
    initialisation();
    yyparse(); 
    afficher_qdr();
    optimisation();
    afficher_qdr();
-   //createAssembler(qc,head);
+   struct quadTab* array = convertToArray(head);
+   createAssembler(qc,array);
    afficher();  
   
    

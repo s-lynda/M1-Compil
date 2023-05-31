@@ -19,7 +19,15 @@ typedef struct element {
    struct element* next;
    char valstring[10]; // for storing CHAR and BOOL values
 } element;
+typedef struct quad quad;
 
+struct quad
+{
+	char* opr;
+	char* op1;
+	char* op2;
+	char* res;
+};
 // Hash table for IDF and constant entries
 element* tab[MAX_SIZE];
 int cpt, cpts, cptm;
@@ -329,64 +337,29 @@ void inc_val_idf (char entite[]){
 	SetVal(entite,old);
 }
 
-/*
 
-void createAssembler(int qc, struct quad *liste)
-{
+
+
+
+void createAssembler(int qc, struct quad liste[2000]){
 	
 	FILE *filePointer;
 	filePointer = fopen("assembly.asm", "w");
 	
-    //Vérification que le fichier a été bien créé
-	if(filePointer == NULL) 
-    {
+	if(filePointer == NULL) {
       printf("Error creating file\n");
 	}
 	
-	fprintf(filePointer,"TITLE Programme.asm : \n"); //donner un nom au programme
-	fprintf(filePointer,"Pile segment stack ; \n");  
-	// fprintf(filePointer,"dw 100 dup(?) \n"); // car on a la structure tableau ( non itisitialisée DW -> Duplicate Word et un mot c un octet )
-	fprintf(filePointer,"Pile ends \n"); // dans notre cas pas de segment de pile 
-
-
-    // Segment de données ou l'etiquette est DATA
+	fprintf(filePointer,"TITLE prg.asm : \n");
+	fprintf(filePointer,"Pile segment stack ; \n");
+	fprintf(filePointer,"dw 100 dup(?) \n");
+	fprintf(filePointer,"Pile ends \n");
 	fprintf(filePointer,"DATA segment \n");
-	for(int i=0;i<673;i++)
-	{
-      entite * ptr=TableHachage[i].tete;
-      while(ptr!=NULL)
-        {
-			if(strcmp(ptr->nature,"Variable")==0)
-            {
-				if(strcmp(ptr->type,"INTEGER")==0)
-                    {fprintf(filePointer,"%s DD ?\n",ptr->name);
-                    }
-				if(strcmp(ptr->type,"FLOAT")==0)
-                    {fprintf(filePointer,"%s DW ?\n",ptr->name);}
-			}
-            // else
-            // {
-			// 	// if(strcmp(ptr->nature,"Tableau")==0)
-            //     // {
-			// 	// 	if(strcmp(ptr->type,"INTEGER")==0)
-            //     //     {fprintf(filePointer,"%s DD %d DUP ?\n",ptr->name, ptr->taille);
-            //     //     }
-			// 	// 	if(strcmp(ptr->type,"FLOAT")==0)
-            //     //     {
-            //     //         fprintf(filePointer,"%s DW %d DUP ?\n",ptr->name, ptr->taille);
-            //     //     }
-			// 	// }
-			// }
-			
-            ptr=ptr->svt;
-		}
-
-	}
 
 	fprintf(filePointer,"temp DD 2000 ?\n");
 	fprintf(filePointer,"DATA ends\n");
+	
 
-    // Code Segment  etiquette par CODE
 	fprintf(filePointer,"CODE segment\n");
 	fprintf(filePointer,"ASSUME CS:CODE, DS:DATA\n");
 	fprintf(filePointer,"MAIN :\n");
@@ -394,45 +367,43 @@ void createAssembler(int qc, struct quad *liste)
 	fprintf(filePointer,"MOV DS,AX\n");
 	for(int i=0;i<qc;i++){
 		fprintf(filePointer,"etiquette%d: \n",i);
-		if(strcmp(liste->opr,"+")==0)
-        {
-			if((liste->op1[0]=='T')&&(liste->op2[0]=='T'))
-            {
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op1, liste[i]->op1+1, strlen(liste[i]->op1)));
+		if(strcmp(liste[i].opr,"+")==0){
+			if((liste[i].op1[0]=='T')&&(liste[i].op2[0]=='T')){
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op1, liste[i].op1+1, strlen(liste[i].op1)));
 				fprintf(filePointer,"MOV BX,temp[SI]\n");
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 				fprintf(filePointer,"MOV AX,temp[SI]\n");
 				fprintf(filePointer,"ADD AX,BX\n");
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 				fprintf(filePointer,"MOV temp[SI], AX\n");
 			}
 			else{
-				if(liste[i]->op1[0]=='T'){
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op1, liste[i]->op1+1, strlen(liste[i]->op1)));
+				if(liste[i].op1[0]=='T'){
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op1, liste[i].op1+1, strlen(liste[i].op1)));
 					fprintf(filePointer,"MOV AX,temp[SI]\n");
-					fprintf(filePointer,"MOV BX, %s\n",liste[i]->op2);
+					fprintf(filePointer,"MOV BX, %s\n",liste[i].op2);
 					fprintf(filePointer,"ADD AX,BX\n");
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 					fprintf(filePointer,"MOV temp[SI], AX\n");
 				}
-				if(liste[i]->op2[0]=='T'){
-					fprintf(filePointer,"MOV AX, %s\n",liste[i]->op1);
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+				if(liste[i].op2[0]=='T'){
+					fprintf(filePointer,"MOV AX, %s\n",liste[i].op1);
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 					fprintf(filePointer,"MOV BX,temp[SI]\n");
 					fprintf(filePointer,"ADD AX,BX\n");
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 					fprintf(filePointer,"MOV temp[SI], AX\n");
 				}
 				else{
-					if(strcmp(liste[i]->op1,liste[i]->res)==0){
-						fprintf(filePointer,"MOV BX, %s\n",liste[i]->op1);
-						fprintf(filePointer,"MOV AX, %s\n",liste[i]->op2);
+					if(strcmp(liste[i].op1,liste[i].res)==0){
+						fprintf(filePointer,"MOV BX, %s\n",liste[i].op1);
+						fprintf(filePointer,"MOV AX, %s\n",liste[i].op2);
 						fprintf(filePointer,"ADD BX, AX \n");
-						fprintf(filePointer,"MOV %s, BX\n",liste[i]->op1);
+						fprintf(filePointer,"MOV %s, BX\n",liste[i].op1);
 					}else{
-						fprintf(filePointer,"MOV BX, %s\n",liste[i]->op1);
-						fprintf(filePointer,"MOV AX, %s\n",liste[i]->op2);
-						fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+						fprintf(filePointer,"MOV BX, %s\n",liste[i].op1);
+						fprintf(filePointer,"MOV AX, %s\n",liste[i].op2);
+						fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 						fprintf(filePointer,"ADD BX, AX \n");
 						fprintf(filePointer,"MOV temp[SI], BX\n");
 					}
@@ -441,173 +412,173 @@ void createAssembler(int qc, struct quad *liste)
 			}
 
 	}
-		if(strcmp(liste[i]->opr,"-")==0){
-			if((liste[i]->op1[0]=='T')&&(liste[i]->op2[0]=='T')){
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op1, liste[i]->op1+1, strlen(liste[i]->op1)));
+		if(strcmp(liste[i].opr,"-")==0){
+			if((liste[i].op1[0]=='T')&&(liste[i].op2[0]=='T')){
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op1, liste[i].op1+1, strlen(liste[i].op1)));
 				fprintf(filePointer,"MOV BX,temp[SI]\n");
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 				fprintf(filePointer,"MOV AX,temp[SI]\n");
 				fprintf(filePointer,"SUB AX,BX\n");
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 				fprintf(filePointer,"MOV temp[SI], AX\n");
 			}
 			else{
-				if(liste[i]->op1[0]=='T'){
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op1, liste[i]->op1+1, strlen(liste[i]->op1)));
+				if(liste[i].op1[0]=='T'){
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op1, liste[i].op1+1, strlen(liste[i].op1)));
 					fprintf(filePointer,"MOV AX,temp[SI]\n");
-					fprintf(filePointer,"MOV BX, %s\n",liste[i]->op2);
+					fprintf(filePointer,"MOV BX, %s\n",liste[i].op2);
 					fprintf(filePointer,"SUB AX,BX\n");
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 					fprintf(filePointer,"MOV temp[SI], AX\n");
 				}
-				if(liste[i]->op2[0]=='T'){
-					fprintf(filePointer,"MOV AX, %s\n",liste[i]->op1);
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+				if(liste[i].op2[0]=='T'){
+					fprintf(filePointer,"MOV AX, %s\n",liste[i].op1);
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 					fprintf(filePointer,"MOV BX,temp[SI]\n");
 					fprintf(filePointer,"SUB AX,BX\n");
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 					fprintf(filePointer,"MOV temp[SI], AX\n");
 				}
 				else{
-					fprintf(filePointer,"MOV BX, %s\n",liste[i]->op1);
-					fprintf(filePointer,"MOV AX, %s\n",liste[i]->op2);
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+					fprintf(filePointer,"MOV BX, %s\n",liste[i].op1);
+					fprintf(filePointer,"MOV AX, %s\n",liste[i].op2);
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 					fprintf(filePointer,"SUB BX, AX \n");
 					fprintf(filePointer,"MOV temp[SI], BX\n");
 				}
 			}
 
 	}
-	if(strcmp(liste[i]->opr,"*")==0){
-			if((liste[i]->op1[0]=='T')&&(liste[i]->op2[0]=='T')){
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op1, liste[i]->op1+1, strlen(liste[i]->op1)));
+	if(strcmp(liste[i].opr,"*")==0){
+			if((liste[i].op1[0]=='T')&&(liste[i].op2[0]=='T')){
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op1, liste[i].op1+1, strlen(liste[i].op1)));
 				fprintf(filePointer,"MOV BX,temp[SI]\n");
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 				fprintf(filePointer,"MOV AX,temp[SI]\n");
 				fprintf(filePointer,"MUL BX\n");
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 				fprintf(filePointer,"MOV temp[SI], AX\n");
 			}
 			else{
 				if(liste[i].op1[0]=='T'){
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op1, liste[i]->op1+1, strlen(liste[i]->op1)));
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op1, liste[i].op1+1, strlen(liste[i].op1)));
 					fprintf(filePointer,"MOV AX,temp[SI]\n");
-					fprintf(filePointer,"MOV BX, %s\n",liste[i]->op2);
+					fprintf(filePointer,"MOV BX, %s\n",liste[i].op2);
 					fprintf(filePointer,"MUL BX\n");
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 					fprintf(filePointer,"MOV temp[SI], AX\n");
 				}
-				if(liste[i]->op2[0]=='T'){
-					fprintf(filePointer,"MOV AX, %s\n",liste[i]->op1);
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+				if(liste[i].op2[0]=='T'){
+					fprintf(filePointer,"MOV AX, %s\n",liste[i].op1);
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 					fprintf(filePointer,"MOV BX,temp[SI]\n");
 					fprintf(filePointer,"MUL BX\n");
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 					fprintf(filePointer,"MOV temp[SI], AX\n");
 				}
 				else{
-					fprintf(filePointer,"MOV BX, %s\n",liste[i]->op1);
-					fprintf(filePointer,"MOV AX, %s\n",liste[i]->op2);
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+					fprintf(filePointer,"MOV BX, %s\n",liste[i].op1);
+					fprintf(filePointer,"MOV AX, %s\n",liste[i].op2);
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 					fprintf(filePointer,"MUL BX \n");
 					fprintf(filePointer,"MOV temp[SI], AX\n");
 				}
 			}
 
 	}
-	if(strcmp(liste[i]->opr,"/")==0){
-			if((liste[i]->op1[0]=='T')&&(liste[i]->op2[0]=='T')){
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op1, liste[i]->op1+1, strlen(liste[i]->op1)));
+	if(strcmp(liste[i].opr,"/")==0){
+			if((liste[i].op1[0]=='T')&&(liste[i].op2[0]=='T')){
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op1, liste[i].op1+1, strlen(liste[i].op1)));
 				fprintf(filePointer,"MOV AX,temp[SI]\n");
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 				fprintf(filePointer,"MOV BX,temp[SI]\n");
 				fprintf(filePointer,"DIV BX\n");
-				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+				fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 				fprintf(filePointer,"MOV temp[SI], AX\n");
 			}
 			else{
-				if(liste[i]->op1[0]=='T'){
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op1, liste[i]->op1+1, strlen(liste[i]->op1)));
+				if(liste[i].op1[0]=='T'){
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op1, liste[i].op1+1, strlen(liste[i].op1)));
 					fprintf(filePointer,"MOV BX,temp[SI]\n");
-					fprintf(filePointer,"MOV AX, %s\n",liste[i]->op2);
+					fprintf(filePointer,"MOV AX, %s\n",liste[i].op2);
 					fprintf(filePointer,"DIV BX\n");
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 					fprintf(filePointer,"MOV temp[SI], AX\n");
 				}
-				if(liste[i]->op2[0]=='T'){
-					fprintf(filePointer,"MOV BX, %s\n",liste[i]->op1);
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+				if(liste[i].op2[0]=='T'){
+					fprintf(filePointer,"MOV BX, %s\n",liste[i].op1);
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 					fprintf(filePointer,"MOV AX,temp[SI]\n");
 					fprintf(filePointer,"DIV BX\n");
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 					fprintf(filePointer,"MOV temp[SI], AX\n");
 				}
 				else{
-					fprintf(filePointer,"MOV AX, %s\n",liste[i]->op1);
-					fprintf(filePointer,"MOV BX, %s\n",liste[i]->op2);
-					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+					fprintf(filePointer,"MOV AX, %s\n",liste[i].op1);
+					fprintf(filePointer,"MOV BX, %s\n",liste[i].op2);
+					fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 					fprintf(filePointer,"DIV BX \n");
 					fprintf(filePointer,"MOV temp[SI], AX\n");
 				}
 			}
 
 	}
-	if(strcmp(liste[i]->opr,"BR")==0){
-		if(atoi(liste[i]->op1) <= (qc-1)){
+	if(strcmp(liste[i].opr,"BR")==0){
+		if(atoi(liste[i].op1) <= (qc-1)){
 			fprintf(filePointer,"JMP etiquette%s\n",liste[i].op1);
 		}else{
 			fprintf(filePointer,"JMP FIN \n");
 		}
 	}
-	if(strcmp(liste[i]->opr,"BG")==0){
-		if(atoi(liste[i]->op1) <= (qc-1)){
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+	if(strcmp(liste[i].opr,"BG")==0){
+		if(atoi(liste[i].op1) <= (qc-1)){
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
-			fprintf(filePointer,"JG etiquette%s\n",liste[i]->op1);
+			fprintf(filePointer,"JG etiquette%s\n",liste[i].op1);
 		}else{
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
 			fprintf(filePointer,"JG FIN\n");
 		}
 			
 	}
-	if(strcmp(liste[i]->opr,"BGE")==0){
-		if(atoi(liste[i]->op1) <= (qc-1)){
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+	if(strcmp(liste[i].opr,"BGE")==0){
+		if(atoi(liste[i].op1) <= (qc-1)){
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
 			fprintf(filePointer,"JGE etiquette%s\n",liste[i].op1);
 		}else{
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
 			fprintf(filePointer,"JGE FIN \n");
 		}
 	}
-	if(strcmp(liste[i]->opr,"BL")==0){
-		if(atoi(liste[i]->op1) <= (qc-1)){
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+	if(strcmp(liste[i].opr,"BL")==0){
+		if(atoi(liste[i].op1) <= (qc-1)){
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
 			fprintf(filePointer,"JL etiquette%s\n",liste[i].op1);
 		}else{
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
 			fprintf(filePointer,"JL FIN \n");
 		}
 
 	}
-	if(strcmp(liste[i]->opr,"BLE")==0){
-		if(atoi(liste[i]->op1) <= (qc-1)){
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+	if(strcmp(liste[i].opr,"BLE")==0){
+		if(atoi(liste[i].op1) <= (qc-1)){
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
-			fprintf(filePointer,"JLE etiquette%s\n",liste[i]->op1);
+			fprintf(filePointer,"JLE etiquette%s\n",liste[i].op1);
 		}else{
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
 			fprintf(filePointer,"JLE FIN \n");
@@ -615,52 +586,52 @@ void createAssembler(int qc, struct quad *liste)
 	}
 	if(strcmp(liste[i].opr,"BZ")==0){
 		if(atoi(liste[i].op1) <= (qc-1)){
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
 			fprintf(filePointer,"JE etiquette%s\n",liste[i].op1);
 		}else{
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
 			fprintf(filePointer,"JE FIN \n");
 		}
 	}
-	if(strcmp(liste[i]->opr,"BNZ")==0){
-		if(atoi(liste[i]->op1) <= (qc-1)){
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+	if(strcmp(liste[i].opr,"BNZ")==0){
+		if(atoi(liste[i].op1) <= (qc-1)){
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
 			fprintf(filePointer,"JNE etiquette%s\n",liste[i].op1);
 		}else{
-			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i]->op2, liste[i]->op2+1, strlen(liste[i]->op2)));
+			fprintf(filePointer,"MOV SI, %s\n",memmove(liste[i].op2, liste[i].op2+1, strlen(liste[i].op2)));
 			fprintf(filePointer,"MOV CX,temp[SI]\n");
 			fprintf(filePointer,"CMP CX, 0\n");
 			fprintf(filePointer,"JNE FIN \n");
 		}
 	}
-	if(strcmp(liste[i]->opr,"=")==0){
-		if(liste[i]->res[0]=='T'){
-			if(liste[i]->op1[0]=='T'){
-				fprintf(filePointer,"MOV SI, %s \n",memmove(liste[i].op1, liste[i].op1+1, strlen(liste[i]->op1)));
+	if(strcmp(liste[i].opr,"=")==0){
+		if(liste[i].res[0]=='T'){
+			if(liste[i].op1[0]=='T'){
+				fprintf(filePointer,"MOV SI, %s \n",memmove(liste[i].op1, liste[i].op1+1, strlen(liste[i].op1)));
 				fprintf(filePointer,"MOV BX, temp[SI]\n");
-				fprintf(filePointer,"MOV SI, %s \n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+				fprintf(filePointer,"MOV SI, %s \n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 				fprintf(filePointer,"MOV temp[SI], BX\n");
 			}
 			else{
-				fprintf(filePointer,"MOV BX, %s \n",liste[i]->op1);
-				fprintf(filePointer,"MOV SI, %s \n",memmove(liste[i]->res, liste[i]->res+1, strlen(liste[i]->res)));
+				fprintf(filePointer,"MOV BX, %s \n",liste[i].op1);
+				fprintf(filePointer,"MOV SI, %s \n",memmove(liste[i].res, liste[i].res+1, strlen(liste[i].res)));
 				fprintf(filePointer,"MOV temp[SI], BX\n");
 			}			
 		}else{
-			if(liste[i]->op1[0]=='T'){
-				fprintf(filePointer,"MOV SI, %s \n",memmove(liste[i]->op1, liste[i]->op1+1, strlen(liste[i]->op1)));
+			if(liste[i].op1[0]=='T'){
+				fprintf(filePointer,"MOV SI, %s \n",memmove(liste[i].op1, liste[i].op1+1, strlen(liste[i].op1)));
 				fprintf(filePointer,"MOV BX, temp[SI]\n");
-				fprintf(filePointer,"MOV %s, BX\n",liste[i]->res);
+				fprintf(filePointer,"MOV %s, BX\n",liste[i].res);
 			}
 			else{
-				fprintf(filePointer,"MOV BX, %s \n",liste[i]->op1);
-				fprintf(filePointer,"MOV %s, BX\n",liste[i]->res);
+				fprintf(filePointer,"MOV BX, %s \n",liste[i].op1);
+				fprintf(filePointer,"MOV %s, BX\n",liste[i].res);
 			}
 		}
 	}
@@ -672,5 +643,3 @@ void createAssembler(int qc, struct quad *liste)
 	fprintf(filePointer,"END MAIN\n");
 	fclose(filePointer);
 }
-
-*/
