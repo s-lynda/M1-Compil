@@ -111,7 +111,7 @@ DEC: TYPE idf LIST_VAR {
 // un tableau est reconnue comme type table , pas d'allocation d'espace 
 TAB_DEC: TYPE idf croch_O cst_int croch_F 
                     {   if (doubleDeclaration($2)!=0)
-                        {inserer($2,"IDF",sauvidf, 0, "", 0,"VARIABLE");}
+                        {inserer($2,"IDF",sauvidf, 0, "", 0,"TABLEAU");}
                         else {
                                 printf("\n =====> Erreur a la ligne %d et colonne %d : idf deja declarer", nb_ligne, Col);
                         }}
