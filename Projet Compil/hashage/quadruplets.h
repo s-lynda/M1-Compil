@@ -95,6 +95,16 @@ void ajout_quad_opbinaire(char op, float* opa, float* opb) {
     }
 }
 
+void ajout_quad_opbinaireIDF(char op, char opa[], float* opb) {
+    
+    sprintf(ope2, "%f", *opb);
+    switch (op) {
+        case '+': quadruplet("+", opa, ope2, "<tmporaire>"); break;
+        case '-': quadruplet("-", opa, ope2, "<tmporaire>"); break;
+        case '*': quadruplet("*", opa, ope2, "<tmporaire>"); break;
+        case '/': quadruplet("+", opa, ope2, "<tmporaire>"); break;
+    }
+}
 void ajout_quad_opunaire(float* opb) {
     sprintf(ope2, "%f", *opb);
     quadruplet("-", "0", ope2, "<temporaire>");

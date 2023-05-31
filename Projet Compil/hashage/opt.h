@@ -106,6 +106,29 @@ void checkX2(quad* q)
     }
 }
 
+void eliminateRedundantExpressions(quad* q)
+{
+    quad* current = q;
+    while (current != NULL)
+    {
+        quad* innerCurrent = current->next;
+        while (innerCurrent != NULL)
+        {
+            if (strcmp(current->opr, innerCurrent->opr) == 0 &&
+                strcmp(current->op1, innerCurrent->op1) == 0 &&
+                strcmp(current->op2, innerCurrent->op2) == 0 &&
+                strcmp(current->res, innerCurrent->res) != 0)
+            {
+                // Replace redundant expression with the result of the previous expression
+                free(innerCurrent->res);
+                innerCurrent->res = strdup(current->res);
+            }
+            innerCurrent = innerCurrent->next;
+        }
+        current = current->next;
+    }
+}
+
 
 
 void optimisation()
@@ -113,6 +136,7 @@ void optimisation()
     checkX2(head);
     //checkPow(head);
    // checkVarUse(listesymbol, head);
+    eliminateRedundantExpressions(head);
     chekPropCopie(head);
     removeUnusedQuads();
 }
@@ -176,43 +200,5 @@ void checkVarUse(TS_hash ls, quad* q)
     }
 }
 
-void chekPropCopie(quad* q)
-{
-    quad* current = q;
-    while (current != NULL)
-    {
-        if (current->opr[0] == '=')
-        {
-            quad* innerCurrent = current->next;
-            while (innerCurrent != NULL)
-            {
-                if (strcmp(current->op1, innerCurrent->res) == 0 || strcmp(current->res, innerCurrent->res) == 0)
-                    break;
-                if (innerCurrent->opr[0] == '+' || innerCurrent->opr[0] == '*' || innerCurrent->opr[0] == '-' || innerCurrent->opr[0] == '/' || innerCurrent->opr[0] == '^')
-                {
-                    if (strcmp(current->res, innerCurrent->op1) == 0)
-                    {
-                        innerCurrent->op1 = strdup(current->op1);
-                        freeQuad(current);
-                        current->opr = strdup("");
-                        current->op1 = strdup("");
-                        current->op2 = strdup("");
-                        current->res = strdup("");
-                    }
-                    else if (strcmp(current->res, innerCurrent->op2) == 0)
-                    {
-                        innerCurrent->op2 = strdup(current->op1);
-                        freeQuad(current);
-                        current->opr = strdup("");
-                        current->op1 = strdup("");
-                        current->op2 = strdup("");
-                        current->res = strdup("");
-                    }
-                }
-                innerCurrent = innerCurrent->next;
-            }
-        }
-        current = current->next;
-    }
-}
+
 */

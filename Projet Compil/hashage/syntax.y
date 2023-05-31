@@ -23,7 +23,7 @@ char* get_type(char idf[]);
 
 #define MAX_SIZE 1000
 extern int nb_ligne;
-float tmp;
+float tmp,valfloat;
 int yyparse(); 
 int yylex();
 int yyerror(char *s);
@@ -116,12 +116,16 @@ TAB_DEC: TYPE idf croch_O cst_int croch_F
                                 printf("\n =====> Erreur a la ligne %d et colonne %d : idf deja declarer", nb_ligne, Col);
                         }}
 ;
-
-LIST_VAR: vrg idf LIST_VAR 
+LIST_VAR: vrg idf LIST_VAR
 { 
-                        if (doubleDeclaration($2)==0){ modifier_type($2,sauvidf); }
-                        else{{printf("\n=======> Errreur symantique a la ligne %d , DOUBLE DECLARATION  de idf %s\n",nb_ligne,Col,$2);}}}
-        | 
+    if (doubleDeclaration($2) != 0) {
+      inserer($2,"IDF",sauvidf, 0, "", 0,"VARIABLE");
+    }
+    else {
+        printf("\n=======> Erreur sémantique à la ligne %d, DOUBLE DECLARATION de idf %s\n", nb_ligne, Col, $2);
+    }
+}
+| 
 ;
 
 TYPE:        mc_Int {strcpy(sauvidf,"INTEGER");}
@@ -222,35 +226,87 @@ AFFECT_ARITHM : idf mc_aff EXP_ARRITH  SAUT
 
 
 EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH     
-         {
-            op2=Depiler();op1=Depiler(); tmp = op1+op2; Empiler(tmp);
+       { if (its_idf==1){
 
-            ajout_quad_opbinaire('+',&op1,&op2);
-            
-         }
-	      |EXP_ARRITH minus EXP_ARRITH   
-          {
-            op2=Depiler();op1=Depiler(); tmp = op1-op2; Empiler(tmp);
-            ajout_quad_opbinaire('-',&op1,&op2);
+            op2=Depiler();op1=Depiler();
+            tmp = op1+op2; Empiler(tmp);
+            get_val_float(sauvidfqud,&valfloat);
+            if (valfloat== op1){
+            ajout_quad_opbinaireIDF('+',sauvidfqud,&op2); 
+            }
+            else{
+                ajout_quad_opbinaireIDF('+',sauvidfqud,&op1); 
+            }
 
+           
           }
-	      |EXP_ARRITH mul EXP_ARRITH 
-          { /*if (its_idf==1){
-            op2=Depiler();get_val_float(sauvidfqud,op1); tmp = op1*op2; Empiler(tmp);
-            ajout_quad_('*',&op1,sauvidfqud); 
-          }*/
+          else {
+            op2=Depiler();op1=Depiler(); tmp = op1+op2; Empiler(tmp);
+            ajout_quad_opbinaire('+',&op1,&op2);}
+          } 
+	      |EXP_ARRITH minus EXP_ARRITH   
+          { if (its_idf==1){
+
+            op2=Depiler();op1=Depiler();
+            tmp = op1-op2; Empiler(tmp);
+            get_val_float(sauvidfqud,&valfloat);
+            if (valfloat== op1){
+            ajout_quad_opbinaireIDF('-',sauvidfqud,&op2); 
+            }
+            else{
+                ajout_quad_opbinaireIDF('-',sauvidfqud,&op1); 
+            }
+
+           
+          }
+          else {
             op2=Depiler();op1=Depiler(); tmp = op1*op2; Empiler(tmp);
-            ajout_quad_opbinaire('*',&op1,&op2);
+            ajout_quad_opbinaire('-',&op1,&op2);}
+          } 
+	      |EXP_ARRITH mul EXP_ARRITH 
+          { if (its_idf==1){
+
+            op2=Depiler();op1=Depiler();
+            tmp = op1*op2; Empiler(tmp);
+            get_val_float(sauvidfqud,&valfloat);
+            if (valfloat== op1){
+            ajout_quad_opbinaireIDF('*',sauvidfqud,&op2); 
+            }
+            else{
+                ajout_quad_opbinaireIDF('*',sauvidfqud,&op1); 
+            }
+
+           
+          }
+          else {
+            op2=Depiler();op1=Depiler(); tmp = op1*op2; Empiler(tmp);
+            ajout_quad_opbinaire('*',&op1,&op2);}
           } 
           |EXP_ARRITH division EXP_ARRITH 
             {        
              op2=Depiler();op1=Depiler();
              if(op2==0){
-		printf ("> Erreur semantique ligne %d colonne %d DIVISION PAR 0 \n",nb_ligne,Col);
+	       	printf ("> Erreur semantique ligne %d colonne %d DIVISION PAR 0 \n",nb_ligne,Col);
 			     }else{
 
-                tmp = op1/op2; Empiler(tmp);
-                ajout_quad_opbinaire('/',&op1,&op2);
+                { if (its_idf==1){
+
+            op2=Depiler();op1=Depiler();
+            tmp = op1/op2; Empiler(tmp);
+            get_val_float(sauvidfqud,&valfloat);
+            if (valfloat== op1){
+            ajout_quad_opbinaireIDF('/',sauvidfqud,&op2); 
+            }
+            else{
+                ajout_quad_opbinaireIDF('/',sauvidfqud,&op1); 
+            }
+
+           
+          }
+          else {
+            op2=Depiler();op1=Depiler(); tmp = op1/op2; Empiler(tmp);
+            ajout_quad_opbinaire('/',&op1,&op2);}
+          } 
 
       
            }}
@@ -268,8 +324,9 @@ EXP_ARRITH:EXP_ARRITH plus EXP_ARRITH
             else{
             get_val_float($1,&tmp);
             its_idf=1;
+            Empiler(tmp);
             strcpy(sauvidfqud,$1);
-            Empiler(tmp);}} 
+            }} 
            |cst_int {Empiler($1);}
      	     |cst_reel { Empiler($1);}
 ;
@@ -431,6 +488,7 @@ int main()
    afficher_qdr();
    optimisation();
    afficher_qdr();
+   //createAssembler(qc,head);
    afficher();  
   
    

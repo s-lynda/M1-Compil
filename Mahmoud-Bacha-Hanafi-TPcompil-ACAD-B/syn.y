@@ -109,7 +109,7 @@ List_Dec : DEC SAUT ;
 
 DEC: TYPE idf LIST_VAR { 
                         
-                        if (doubleDeclaration($2)==0){ Inserer_type($2,sauvidf); }
+                        if (doubleDeclaration($2)==0){ modifier_type($2,sauvidf); }
                         else{{printf("    >>>>>>> Errreur symantique a la ligne %d colonne %d , DOUBLE DECLARATION de idf %s \n",semligne,semcol,$2);}}
                         }
                         

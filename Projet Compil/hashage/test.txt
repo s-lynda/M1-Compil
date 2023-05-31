@@ -1,7 +1,1 @@
-Int T1
-Int T2
-Int T3
-
-T1=T2
-T3=4*T1
-
+Int T1,T2
