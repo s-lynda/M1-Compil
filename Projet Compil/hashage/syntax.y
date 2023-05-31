@@ -17,6 +17,9 @@ void set_val_string(char idf[], char type[]);
 void inserer(char entite[], char code[], char type[], float val, char val_string[], int y,char nature[]) ;
 void initialisation();
 void afficher();
+void get_val_float(char idf[],float *ttmp);
+ int Is_int(float *N);
+void createAssembler(int qc, struct quad liste[2000]);
 void SetVal(char entite[], float z);
 char* get_type(char idf[]);
 #endif
@@ -188,7 +191,19 @@ AFFECT :AFFECT_ARITHM
 ;
 
 AFF_SPECIAL: idf mc_aff mc_Img point mc_pilf1 PATH SAUT
+{if (doubleDeclaration($1)!=0) {
+        inserer($1,"IDF","Img_array", 0, "", 0,"Variable");
+        }
+        else{
+            printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s deja declarer", nb_ligne, Col,$1);
+        }}
            | idf mc_aff idf point mc_npf1 PATH SAUT
+            {if (doubleDeclaration($1)!=0) {
+             inserer($1,"IDF","Img_array", 0, "", 0,"Variable");
+           }
+        else{
+            printf("\n =====> Erreur a la ligne %d et colonne %d : idf %s deja declarer", nb_ligne, Col,$1);
+        }}
            |mc_Img point mc_pilf2 PATH point mc_pilf3 PATH SAUT
 ;
 PATH: par_O guillemets idf guillemets par_F
@@ -491,8 +506,8 @@ int main()
    afficher_qdr();
    optimisation();
    afficher_qdr();
-   struct quadTab* array = convertToArray(head);
-   createAssembler(qc,array);
+   //struct quadTab* array = convertToArray(head);
+   //createAssembler(qc,array);
    afficher();  
   
    

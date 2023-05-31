@@ -210,6 +210,30 @@ void afficher() {
    //free_hash_table() ;
 }
 
+char* substring(const char *src, int m, int n)
+{
+    int i=m;
+    // get the length of the destination string
+    int len = n - m;
+
+    // allocate (len + 1) chars for destination (+1 for extra null character)
+    char *dest = (char*)malloc(sizeof(char) * (len + 1));
+
+    // extracts characters between m'th and n'th index from source string
+    // and copy them into the destination string
+    for (i; i < n && (*(src + i) != '\0'); i++)
+    {
+        *dest = *(src + i);
+        dest++;
+    }
+
+    // null-terminate the destination string
+    *dest = '\0';
+
+    // return the destination string
+    return dest - len;
+}
+
 // Verifier si un idf est deja declarer en verifiant son type
 int doubleDeclaration(char idf[]) {
    int hash = hash_function(idf);

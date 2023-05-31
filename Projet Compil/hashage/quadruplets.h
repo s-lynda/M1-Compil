@@ -16,7 +16,7 @@ struct quadTab
 	char* op1;
 	char* op2;
 	char* res;
-};
+}quadTab;
 
 quad* head = NULL; // Pointeur vers la tête de la liste chaînée
 extern int qc; // Compteur de quadruplets

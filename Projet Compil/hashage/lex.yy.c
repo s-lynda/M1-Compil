@@ -980,7 +980,7 @@ YY_RULE_SETUP
 						     printf ("Erreur lexicale: depassement de la taille des entiers  a la Ligne %d et a la colonne %d \n", nb_ligne, Col);
 					   }
 					   else {
-						    
+						     inserer (yytext,"Cst_entier","INTEGER",atoi(yytext),"", 0,"");
 						     printf("Ligne %d  signed integer reconnu %s \n" ,nb_ligne, yytext );   return cst_int; 
 					   }
 	}	
@@ -988,13 +988,13 @@ YY_RULE_SETUP
 case 27:
 YY_RULE_SETUP
 #line 86 "lexical.l"
-{ inserer(yytext,"cst_reel","FLOAT",atof(yytext),"",0,""); yylval.reel=atof(yytext);printf("Ligne %d  float reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_reel;}
+{ yylval.reel=atof(yytext); inserer(yytext,"cst_reel","FLOAT",atof(yytext),"",0,""); printf("Ligne %d  float reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_reel;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 87 "lexical.l"
 { 
-				yylval.entier=atoi(tmps_signed_numbers); 				
+				yylval.entier=atoi(tmps_signed_numbers); 	 inserer (yytext,"Cst_entier","FLOAT",atoi(yytext),"", 0,"");			
 				yylval.reel=atof(tmps_signed_numbers); printf("Ligne %d  signed float reconnu %s \n" ,nb_ligne, yytext ); 
 				Col = Col + strlen(yytext); return cst_reel;}
 	YY_BREAK

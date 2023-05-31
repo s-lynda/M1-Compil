@@ -10,6 +10,16 @@ ASSUME CS:CODE, DS:DATA
 MAIN :
 MOV AX,DATA
 MOV DS,AX
+etiquette0: 
+MOV BX, 1.000000 
+MOV SI, 1 
+MOV temp[SI], BX
+etiquette1: 
+MOV BX, 2.000000
+MOV AX, 1.000000
+MOV SI, tmporaire>
+ADD BX, AX 
+MOV temp[SI], BX
 FIN:
 MOV AH,4CH
 INT 21h

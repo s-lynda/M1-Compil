@@ -79,13 +79,13 @@ Int {inserer_keywords(yytext);printf ("ligne %d : mot cle  reconnue est %s \n", 
 						     printf ("Erreur lexicale: depassement de la taille des entiers  a la Ligne %d et a la colonne %d \n", nb_ligne, Col);
 					   }
 					   else {
-						    
+						     inserer (yytext,"Cst_entier","INTEGER",atoi(yytext),"", 0,"");
 						     printf("Ligne %d  signed integer reconnu %s \n" ,nb_ligne, yytext );   return cst_int; 
 					   }
 	}	
-{UnsignedFloat} { inserer(yytext,"cst_reel","FLOAT",atof(yytext),"",0,""); yylval.reel=atof(yytext);printf("Ligne %d  float reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_reel;}
+{UnsignedFloat} { yylval.reel=atof(yytext); inserer(yytext,"cst_reel","FLOAT",atof(yytext),"",0,""); printf("Ligne %d  float reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_reel;}
 {SignedFloat}  { 
-				yylval.entier=atoi(tmps_signed_numbers); 				
+				yylval.entier=atoi(tmps_signed_numbers); 	 inserer (yytext,"Cst_entier","FLOAT",atoi(yytext),"", 0,"");			
 				yylval.reel=atof(tmps_signed_numbers); printf("Ligne %d  signed float reconnu %s \n" ,nb_ligne, yytext ); 
 				Col = Col + strlen(yytext); return cst_reel;}
 {char}  { inserer (yytext,"cst_char","CHAR",0,yytext, 0,""); yylval.str=strdup(yytext); printf("Ligne %d char reconnu %s \n" ,nb_ligne, yytext );  Col = Col + strlen(yytext); return cst_char;}
